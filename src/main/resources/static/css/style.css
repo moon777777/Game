@@ -10,17 +10,35 @@ hr {
     margin: 20px 0; 
 }
 
+.search-bar {
+    background-color: white;
+    border-radius: 20px;
+}
+
+.search-input {
+	width:350px;
+    background-color: white;
+    border: none;
+    outline: none;
+}
+
+.search-button {
+    background: none;
+    border: none;
+}
+
 #wrap{
-	width:1200px;
 	margin:0 auto;
 }
 
 header {
-	height:100px;
+	height:70px;
+	background-color:#2C3E50;
 }
 
 .contents {
-	width:450px;
+	
+	height:450px;
 }
 
 footer {
