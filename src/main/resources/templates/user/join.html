@@ -12,6 +12,8 @@
 					<input type="text" class="form-control mt-4" id="idInput" placeholder="이메일">
 					<button class= "btn mt-4 ml-2 join-button text-white" id="CodeBtn">인증</button>					
 				</div>
+				<div class="text-danger small d-none" id="duplicateEmail">이미 가입된 이메일 주소입니다.</div>
+				<div class="text-success small d-none" id="availableEmail">사용가능한 이메일 주소입니다.</div>
 				<input type="text" class="form-control mt-2" id="emailInput" placeholder="이메일 인증코드">
 				<input type="password" class="form-control mt-2" id="passwordInput" placeholder="비밀번호">
 				<input type="password" class="form-control mt-2" id="passwordConfirmInput" placeholder="비밀번호확인">
@@ -25,6 +27,40 @@
         
         <script layout:fragment="script">
         	$(document).ready(function(){
+        		
+        		var isduplicateId = true;
+        		
+        		$("#idInput").on("input", function(){
+        			let loginId = $("#idInput").val();
+        			
+        			$.ajax({
+						type:"get"
+						, url:"/user/duplicate-id"
+						, data:{"loginId":loginId}
+						, success:function(response) {
+							isduplicateCheck = true;
+							if(response.isDuplicate) {
+								$("#duplicateEmail").removeClass("d-none");
+								$("#availableEmail").addClass("d-none");
+								isduplicateId = true;
+							} else {
+								$("#availableEmail").removeClass("d-none");
+								$("#duplicateEmail").addClass("d-none");
+								isduplicateId = false;
+							}
+						}
+						, error:function() {
+							alert("중복확인 에러!");
+						}
+					});
+        		});
+        		
+        		$("#idInput").on("input", function() {
+					isduplicateId = true;
+					$("#duplicateText").addClass("d-none");
+					$("#availableText").addClass("d-none");
+				});
+        		
         		$("#joinBtn").on("click", function(){
         			let loginId = $("#idInput").val();
         			let password = $("#passwordInput").val();
@@ -50,6 +86,12 @@
 						alert("이름을 입력하세요");
 						return;
 					}
+        			
+        			if(isduplicateId) {
+						alert("중복된 아이디 입니다");
+						return;
+					}
+        			
         			
         			$.ajax({
         				type:"post"
