@@ -2,6 +2,7 @@ package com.bbar.game.common;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 public class MD5HashingEncoder {
 	
@@ -30,4 +31,17 @@ public class MD5HashingEncoder {
 		}
 		return result;
 	}
+	
+	 public static String createSalt() {
+		 SecureRandom random = new SecureRandom();
+		 
+		 byte[] salt = new byte[16];
+		 random.nextBytes(salt);
+		 StringBuilder stringBuild = new StringBuilder();
+		 
+		 for (byte a : salt) {
+			    stringBuild.append(String.format("%02x", a));
+			}
+		 return stringBuild.toString();
+	 }
 }
