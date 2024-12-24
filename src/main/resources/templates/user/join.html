@@ -50,11 +50,11 @@
 							if(response.isDuplicate) {
 								$("#duplicateName").removeClass("d-none");
 								$("#availableName").addClass("d-none");
-								isduplicateId = true;
+								isduplicateName = true;
 							} else {
 								$("#availableName").removeClass("d-none");
 								$("#duplicateName").addClass("d-none");
-								isduplicateId = false;
+								isduplicateName = false;
 							}
 						}
 						, error:function() {
