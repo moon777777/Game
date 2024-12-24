@@ -17,7 +17,8 @@ public class UserService {
 	
 	public boolean addUser(String loginId, String password, String nickname) {
 		
-		String endcodingPassword = MD5HashingEncoder.encode(password);
+		String salt = MD5HashingEncoder.createSalt();
+		String endcodingPassword = MD5HashingEncoder.encode(password, salt);
 		
 		User user = User.builder()
 		.loginId(loginId)

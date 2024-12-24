@@ -6,14 +6,15 @@ import java.security.SecureRandom;
 
 public class MD5HashingEncoder {
 	
-	public static String encode(String message) {
+	public static String encode(String message, String salt) {
 		
 		String result = "";
-		
 		try {
 			MessageDigest messageDigest =  MessageDigest.getInstance("md5");
 			
-			byte[] bytes = message.getBytes();
+			String saltMessage = salt + message;
+			
+			byte[] bytes = saltMessage.getBytes();
 			
 			messageDigest.update(bytes);
 			
@@ -24,11 +25,11 @@ public class MD5HashingEncoder {
 				 result += Integer.toHexString(digest[i] & 0xff);//논리연산 비트연산
 			}
 			
-		} catch(NoSuchAlgorithmException e) {
+		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
-		}
+		}	
 		return result;
 	}
 	
