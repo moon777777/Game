@@ -2,6 +2,7 @@ package com.bbar.game.user.service;
 
 import org.springframework.stereotype.Service;
 
+import com.bbar.game.common.MD5HashingEncoder;
 import com.bbar.game.user.domain.User;
 import com.bbar.game.user.repository.UserRepository;
 
@@ -16,9 +17,11 @@ public class UserService {
 	
 	public boolean addUser(String loginId, String password, String nickname) {
 		
+		String endcodingPassword = MD5HashingEncoder.encode(password);
+		
 		User user = User.builder()
 		.loginId(loginId)
-		.password(password)
+		.password(endcodingPassword)
 		.nickname(nickname)
 		.build();
 		
