@@ -9,16 +9,47 @@
 				<h1 class="text-center">BBAR</h1>
 				<h4 class="text-center">계정 회원가입</h4>
 				<div class="d-flex">
-					<input type="text" class="form-control mt-4" id="loginIdInput" placeholder="이메일">
+					<input type="text" class="form-control mt-4" id="idInput" placeholder="이메일">
 					<button class= "btn mt-4 ml-2 join-button text-white" id="CodeBtn">인증</button>					
 				</div>
 				<input type="text" class="form-control mt-2" id="emailInput" placeholder="이메일 인증코드">
 				<input type="password" class="form-control mt-2" id="passwordInput" placeholder="비밀번호">
 				<input type="password" class="form-control mt-2" id="passwordConfirmInput" placeholder="비밀번호확인">
-				<input type="text" class="form-control mt-2" id="nameInput" placeholder="닉네임">
+				<input type="text" class="form-control mt-2" id="nicknameInput" placeholder="닉네임">
 				<div class="mt-2 p-3 rounded">
 					<div class="text-center small">이미 계정이 있습니다. <a href="#">로그인</a></div>
 				</div>
 				<button class= "btn btn-block mt-3 join-button text-white" id="joinBtn">가입</button>
 			</div>
         </section>
+        
+        <script layout:fragment="script">
+        	$(document).ready(function(){
+        		$("#joinBtn").on("click", function(){
+        			let id = $("#idInput").val();
+        			let password = $("#passwordInput").val();
+        			let passwordConfirm = $("#passwordConfirmInput").val();
+        			let nickname = $("#nicknameInput").val();
+        			
+        			if(id == ""){
+        				alert("이메일을 입력해주세요");
+        				return;
+        			}
+        			
+        			if(password == "") {
+						alert("비밀번호를 입력하세요");
+						return;
+					}
+        			
+        			if(password != passwordConfirm) {
+						alert("비밀번호가 일치하지 않습니다.");
+						return;
+					}
+        			
+        			if(nickname == "") {
+						alert("이름을 입력하세요");
+						return;
+					}
+        		});
+        	});
+        </script>
