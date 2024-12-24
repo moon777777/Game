@@ -18,6 +18,8 @@
 				<input type="password" class="form-control mt-2" id="passwordInput" placeholder="비밀번호">
 				<input type="password" class="form-control mt-2" id="passwordConfirmInput" placeholder="비밀번호확인">
 				<input type="text" class="form-control mt-2" id="nicknameInput" placeholder="닉네임">
+				<div class="text-danger small d-none" id="duplicateName">사용중인 닉네임 입니다.</div>
+				<div class="text-success small d-none" id="availableName">사용가능한 닉네임 입니다.</div>
 				<div class="mt-2 p-3 rounded">
 					<div class="text-center small">이미 계정이 있습니다. <a href="#">로그인</a></div>
 				</div>
@@ -29,10 +31,48 @@
         	$(document).ready(function(){
         		
         		var isduplicateId = true;
+        		var isduplicateName = true;
+        		
+        		$("#nicknameInput").on("input", function(){
+        			let nickname = $("#nicknameInput").val();
+        			
+        			if (nickname === "") {
+        		        $("#duplicateName").addClass("d-none");
+        		        $("#availableName").addClass("d-none");
+        		        isduplicateName = true;  
+        		    } else {	
+        			$.ajax({
+						type:"get"
+						, url:"/user/duplicate-name"
+						, data:{"nickname":nickname}
+						, success:function(response) {
+							isduplicateCheck = true;
+							if(response.isDuplicate) {
+								$("#duplicateName").removeClass("d-none");
+								$("#availableName").addClass("d-none");
+								isduplicateId = true;
+							} else {
+								$("#availableName").removeClass("d-none");
+								$("#duplicateName").addClass("d-none");
+								isduplicateId = false;
+							}
+						}
+						, error:function() {
+							alert("중복확인 에러!");
+						}
+						
+					});
+        		    }
+        		});
         		
         		$("#idInput").on("input", function(){
         			let loginId = $("#idInput").val();
         			
+        			if (loginId === "") {
+        		        $("#duplicateEmail").addClass("d-none");
+        		        $("#availableEmail").addClass("d-none");
+        		        isduplicateId = true;  
+        		    } else {	
         			$.ajax({
 						type:"get"
 						, url:"/user/duplicate-id"
@@ -52,13 +92,21 @@
 						, error:function() {
 							alert("중복확인 에러!");
 						}
+						
 					});
+        		    }
         		});
         		
         		$("#idInput").on("input", function() {
 					isduplicateId = true;
 					$("#duplicateText").addClass("d-none");
 					$("#availableText").addClass("d-none");
+				});
+        		
+        		$("#nicknameInput").on("input", function() {
+					isduplicateName = true;
+					$("#duplicateName").addClass("d-none");
+					$("#availableName").addClass("d-none");
 				});
         		
         		$("#joinBtn").on("click", function(){
@@ -83,7 +131,7 @@
 					}
         			
         			if(nickname == "") {
-						alert("이름을 입력하세요");
+						alert("닉네임을 입력하세요");
 						return;
 					}
         			
@@ -91,6 +139,12 @@
 						alert("중복된 아이디 입니다");
 						return;
 					}
+        			
+        			if(isduplicateName) {
+						alert("중복된 닉네임 입니다");
+						return;
+					}
+        			
         			
         			
         			$.ajax({

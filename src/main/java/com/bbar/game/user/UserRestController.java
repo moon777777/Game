@@ -54,5 +54,22 @@ public class UserRestController {
 				
 		return resultMap;
 	}
+	
+	@GetMapping("/duplicate-name")
+	@ResponseBody
+	public Map<String, Boolean> isDuplicateNickname(@RequestParam("nickname") String nickname) {
+		
+		boolean isDuplicate = userService.isDuplicateNickname(nickname);
+		
+		Map<String, Boolean> resultMap = new HashMap<>();
+		
+		if(isDuplicate) {
+			resultMap.put("isDuplicate", true);
+		} else {
+			resultMap.put("isDuplicate", false);
+		}
+				
+		return resultMap;
+	}
 
 }

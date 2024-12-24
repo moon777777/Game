@@ -36,5 +36,11 @@ public class UserService {
 		return count >= 1;
 	}
 	
+	public boolean isDuplicateNickname(String nickname) {
+		int count = userRepository.countBynickname(nickname);
+		
+		return count >= 1;
+	}
+	
 
 }

@@ -6,5 +6,7 @@ import com.bbar.game.user.domain.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 	public int countByloginId(String loginId);
+	
+	public int countBynickname(String nickname);
 
 }
