@@ -27,6 +27,21 @@ hr {
     border: none;
 }
 
+.join-button {
+	 background-color:#6C8BFE;
+}
+
+input.form-control {
+    color: white;
+    border: black;
+    background-color:black; 
+}
+
+input.form-control:focus {
+    background-color: black;  
+    color: white;  
+}
+
 #wrap{
 	margin:0 auto;
 }
@@ -36,9 +51,9 @@ header {
 	background-color:#2C3E50;
 }
 
-.contents {
-	
-	height:450px;
+.contents > .input-box {
+	width:450px;
+	background-color:#2C3E50;
 }
 
 footer {
