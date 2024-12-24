@@ -26,12 +26,12 @@
         <script layout:fragment="script">
         	$(document).ready(function(){
         		$("#joinBtn").on("click", function(){
-        			let id = $("#idInput").val();
+        			let loginId = $("#idInput").val();
         			let password = $("#passwordInput").val();
         			let passwordConfirm = $("#passwordConfirmInput").val();
         			let nickname = $("#nicknameInput").val();
         			
-        			if(id == ""){
+        			if(loginId == ""){
         				alert("이메일을 입력해주세요");
         				return;
         			}
@@ -50,6 +50,22 @@
 						alert("이름을 입력하세요");
 						return;
 					}
+        			
+        			$.ajax({
+        				type:"post"
+        				, url: "/user/join"
+        				, data:{"loginId":loginId, "password":password, "nickname":nickname}
+        				, success:function(response) {
+        					if(response.result == "success") {
+        						alert("계정이 생성되었습니다.");
+        					} else {
+        						alert("계정생성 실패");
+        					}
+        				}
+        				, error:function() {
+        					alert("계정생성 에러");
+        				}
+        			});
         		});
         	});
         </script>
