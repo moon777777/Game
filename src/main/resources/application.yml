@@ -12,13 +12,13 @@ spring:
         static-path-pattern: /static/**
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/game
+        url: jdbc:mysql://localhost:3306/zzz
         username: root
         password: ${mysql.password}
     thymeleaf:
         cache: false
     application:
-        name: Game
+        name: zzz
 
 mybatis:
     mapper-locations: mappers/*Mapper.xml
