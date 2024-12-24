@@ -30,5 +30,11 @@ public class UserService {
 		}
 	}
 	
+	public boolean isDuplicateLoginId(String loginId) {
+		int count = userRepository.countByloginId(loginId);
+		
+		return count >= 1;
+	}
+	
 
 }
