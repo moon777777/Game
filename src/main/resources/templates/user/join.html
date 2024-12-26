@@ -154,6 +154,7 @@
         				, success:function(response) {
         					if(response.result == "success") {
         						alert("계정이 생성되었습니다.");
+        						location.href = "/user/login-view";
         					} else {
         						alert("계정생성 실패");
         					}
