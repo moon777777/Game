@@ -19,4 +19,6 @@ public class UserController {
 	public String inputLogin(HttpSession session) {		
 		return "user/login";
 	}
+	
+	
 }

@@ -23,6 +23,7 @@ public class UserService {
 		User user = User.builder()
 		.loginId(loginId)
 		.password(endcodingPassword)
+		.salt(salt)
 		.nickname(nickname)
 		.build();
 		
@@ -47,7 +48,8 @@ public class UserService {
 	}
 	
 	public User getUser(String loginId, String password) {
-		String salt = MD5HashingEncoder.createSalt();
+		User user = userRepository.findByLoginId(loginId);
+		String salt = user.getSalt();
 		String endcodingPassword = MD5HashingEncoder.encode(password, salt);
 		
 		return userRepository.findByLoginIdAndPassword(loginId, endcodingPassword);
