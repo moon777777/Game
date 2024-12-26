@@ -12,12 +12,76 @@
 					</div>
 				</div>
 				<div class="d-flex justify-content-center mt-2">
-					<button class= "btn mt-3 default-button text-white btn-sm" id="joinBtn">프로필 이미지 수정</button>				
+					<button class= "btn mt-3 default-button text-white btn-sm" id="imageBtn">프로필 이미지 수정</button>				
 				</div>
 				<h5 class="mt-4">닉네임</h5>
-				<input type="text" class="form-control mt-2" id="emailInput" placeholder="변경할 닉네임">
+				<input type="text" class="form-control mt-2" id="editNicknameInput" th:value="${session.userNickname}">
 				<div class="text-danger small d-none" id="duplicateName">사용중인 닉네임 입니다.</div>
 				<div class="text-success small d-none" id="availableName">사용가능한 닉네임 입니다.</div>
-				<button class= "btn btn-block mt-3 default-button text-white" id="saveBtn">저장</button>
+				<button type="submit" class= "btn btn-block mt-3 default-button text-white" id="saveBtn">저장</button>				
 			</div>
 		</section>
+		
+		 <script layout:fragment="script">
+		 $(document).ready(function(){
+			 var isduplicateName = true;
+			 
+			 $("#saveBtn").on("click", function(){
+				 let nickname = $("#editNicknameInput").val();
+				 
+				 if(nickname == ""){
+					 alert("닉네임을 입력해주세요");
+					 return;
+				 }
+				 
+				 $.ajax({
+						type: "put"
+						, url:"/user/nickname/edit"
+						, data:{"nickname":nickname}
+						, success:function(response) {
+							if(response.result == "success") {
+								location.href="/post/profile"
+							} else {
+								alert("저장 실패");
+							}
+						}
+						, error:function() {
+							alert("저장 에러");
+						}
+						
+					}); 
+			 });
+     		
+     		$("#editNicknameInput").on("input", function(){
+     			let nickname = $("#editNicknameInput").val();
+     			
+     			if (nickname === "") {
+     		        $("#duplicateName").addClass("d-none");
+     		        $("#availableName").addClass("d-none");
+     		        isduplicateName = true;  
+     		    } else {	
+     			$.ajax({
+						type:"get"
+						, url:"/user/duplicate-name"
+						, data:{"nickname":nickname}
+						, success:function(response) {
+							isduplicateCheck = true;
+							if(response.isDuplicate) {
+								$("#duplicateName").removeClass("d-none");
+								$("#availableName").addClass("d-none");
+								isduplicateName = true;
+							} else {
+								$("#availableName").removeClass("d-none");
+								$("#duplicateName").addClass("d-none");
+								isduplicateName = false;
+							}
+						}
+						, error:function() {
+							alert("중복확인 에러!");
+						}
+						
+					});
+     		    }
+		 	});
+		 });
+		 </script>

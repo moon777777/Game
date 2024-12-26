@@ -97,7 +97,7 @@ public class UserRestController {
 		return resultMap;
 	}
 	
-	@PutMapping("/update")
+	@PutMapping("/nickname/edit")
 	public Map<String, String> updateNickname(
 			@RequestParam("nickname") String nickname
 			, HttpSession session) {
@@ -107,6 +107,7 @@ public class UserRestController {
 		Map<String, String> resultMap = new HashMap<>();
 		
 		if(userService.updateNickname(userId, nickname)) {
+			session.setAttribute("userNickname", nickname); // 새로운 세션에 방금 바꾼 닉네임을 저장
 			resultMap.put("result", "success");
 		} else {
 			resultMap.put("result", "fail");
