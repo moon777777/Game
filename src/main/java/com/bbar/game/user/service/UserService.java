@@ -46,5 +46,12 @@ public class UserService {
 		return count >= 1;
 	}
 	
+	public User getUser(String loginId, String password) {
+		String salt = MD5HashingEncoder.createSalt();
+		String endcodingPassword = MD5HashingEncoder.encode(password, salt);
+		
+		return userRepository.findByLoginIdAndPassword(loginId, endcodingPassword);
+	}
+	
 
 }
