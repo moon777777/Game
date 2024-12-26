@@ -11,6 +11,8 @@ hr {
 }
 
 .search-bar {
+	position: fixed;
+	left: 40%;
     background-color: white;
     border-radius: 20px;
 }
@@ -27,7 +29,7 @@ hr {
     border: none;
 }
 
-.join-button {
+.default-button {
 	 background-color:#6C8BFE;
 }
 
@@ -40,6 +42,14 @@ input.form-control {
 input.form-control:focus {
     background-color: black;  
     color: white;  
+}
+
+.profile-box {
+	width: 120px;
+   	height: 120px;
+	border-radius : 50%;
+	border: 1px solid black;
+	overflow: hidden;
 }
 
 #wrap{

@@ -12,5 +12,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	public int countBynickname(String nickname);
 	
 	public User findByLoginIdAndPassword(String loginId, String password);
+	
 
 }

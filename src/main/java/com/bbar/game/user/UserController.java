@@ -16,9 +16,30 @@ public class UserController {
 	}
 	
 	@GetMapping("/login-view")
-	public String inputLogin(HttpSession session) {		
+	public String inputLogin(HttpSession session) {
+		
+		session.removeAttribute("userId");
+		session.removeAttribute("userNickname");
+		
 		return "user/login";
 	}
 	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		
+		session.removeAttribute("userId");
+		session.removeAttribute("userNickname");
+		
+		return "redirect:/user/login-view";
+	}
 	
+	@GetMapping("/edit-password")
+	public String editPassword() {
+		return "user/password";
+	}
+	
+	@GetMapping("/edit-profile")
+	public String editProfile() {
+		return "user/editProfile";
+	}
 }

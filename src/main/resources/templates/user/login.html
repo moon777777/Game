@@ -11,10 +11,10 @@
 				<form id="loginForm">
 					<input type="text" class="form-control mt-4" id="idInput" placeholder="이메일">
 					<input type="password" class="form-control mt-2" id="passwordInput" placeholder="비밀번호">
-					<button type="submit" class= "btn btn-block mt-3 join-button text-white" id="loginBtn">로그인</button>				
+					<button type="submit" class= "btn btn-block mt-3 default-button text-white" id="loginBtn">로그인</button>				
 				</form>
 				<div class="d-flex justify-content-between mt-4">
-					<a href="#" class="text-white">비밀번호 찾기</a>
+					<a href="/user/edit-password" class="text-white">비밀번호 찾기</a>
 					<a href="/user/join-view" class="text-white">가입하기</a>
 				</div>
 			</div>
@@ -45,7 +45,7 @@
 					, data:{"loginId":id, "password":password}
 					, success:function(response) {
 						if(response.result == "success") {
-							alert("로그인 되었습니다.");
+							location.href = "/post/profile";
 						} else {
 							alert("이메일과 비밀번호를 확인해주세요");
 						}

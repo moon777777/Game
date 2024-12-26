@@ -1,5 +1,7 @@
 package com.bbar.game.user.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.bbar.game.common.MD5HashingEncoder;
@@ -55,5 +57,27 @@ public class UserService {
 		return userRepository.findByLoginIdAndPassword(loginId, endcodingPassword);
 	}
 	
+	public boolean updateNickname(int id, String nickname) {
+		
+		Optional<User> optionalUser = userRepository.findById(id);
+		
+		if(optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			
+			user = user.toBuilder()
+			.nickname(nickname)
+			.build();
+			
+			try {
+				userRepository.save(user);
+				return true;
+			} catch(Exception e) {
+				return false;
+			}
+			
+		} else {
+			return false;
+		}
+	}
 
 }
