@@ -52,6 +52,12 @@ input.form-control:focus {
 	overflow: hidden;
 }
 
+.profile-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+
 #wrap{
 	margin:0 auto;
 }

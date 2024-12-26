@@ -107,7 +107,7 @@ public class UserRestController {
 		Map<String, String> resultMap = new HashMap<>();
 		
 		if(userService.updateNickname(userId, nickname)) {
-			session.setAttribute("userNickname", nickname); // 새로운 세션에 방금 바꾼 닉네임을 저장
+			session.setAttribute("userNickname", nickname); 
 			resultMap.put("result", "success");
 		} else {
 			resultMap.put("result", "fail");
