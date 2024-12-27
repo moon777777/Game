@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bbar.game.user.domain.User;
 import com.bbar.game.user.service.UserService;
@@ -108,6 +109,24 @@ public class UserRestController {
 		
 		if(userService.updateNickname(userId, nickname)) {
 			session.setAttribute("userNickname", nickname); 
+			resultMap.put("result", "success");
+		} else {
+			resultMap.put("result", "fail");
+		}
+		return resultMap;
+	}
+	
+	@PutMapping("/profile/edit")
+	public Map<String, String> updateProfile(
+			@RequestParam("imageFile") MultipartFile file
+			, HttpSession session) {
+		
+		int userId = (Integer)session.getAttribute("userId");
+		
+		Map<String, String> resultMap = new HashMap<>();
+			
+		if(userService.updateFile(userId, file)) {			
+			session.setAttribute("userProfile", file); 
 			resultMap.put("result", "success");
 		} else {
 			resultMap.put("result", "fail");

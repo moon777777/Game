@@ -3,7 +3,9 @@ package com.bbar.game.user.service;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.bbar.game.common.FileManager;
 import com.bbar.game.common.MD5HashingEncoder;
 import com.bbar.game.user.domain.User;
 import com.bbar.game.user.repository.UserRepository;
@@ -76,6 +78,31 @@ public class UserService {
 			}
 			
 		} else {
+			return false;
+		}
+	}
+	
+	public boolean updateFile(int id, MultipartFile newFile) {
+		Optional<User> optionalUser = userRepository.findById(id);
+		User user = optionalUser.get();		
+		String oldFilePath = user.getImagePath();
+		if (oldFilePath != null) {
+	        try {
+	            FileManager.removeFile(oldFilePath);
+	        } catch (Exception e) {
+	            return false;
+	        }
+	    }
+		String imagePath = FileManager.saveFile(id, newFile);
+		
+		user = user.toBuilder()
+		.imagePath(imagePath)
+		.build();
+		
+		try {
+			userRepository.save(user);
+			return true;
+		} catch(Exception e) {
 			return false;
 		}
 	}

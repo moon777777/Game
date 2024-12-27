@@ -9,23 +9,53 @@
 				<div></div>
 				<div class="d-flex justify-content-center">
 					<div class="profile-box">
-						<img src="/static/images/default_img.webp" alt="Profile Image">
+						<label for="fileInput"><img th:src="${profileImage}"></label>
+						<input type="file" class="d-none" id="fileInput">
 					</div>
 				</div>
 				<div class="d-flex justify-content-center mt-2">
-					<button class= "btn mt-3 default-button text-white btn-sm" id="imageBtn">프로필 이미지 수정</button>				
+					<button class= "btn mt-3 default-button text-white btn-sm" id="profileBtn">프로필 이미지 수정</button>				
 				</div>
 				<h5 class="mt-4">닉네임</h5>
 				<input type="text" class="form-control mt-2" id="editNicknameInput" th:value="${session.userNickname}">
 				<div class="text-danger small d-none" id="duplicateName">사용중인 닉네임 입니다.</div>
 				<div class="text-success small d-none" id="availableName">사용가능한 닉네임 입니다.</div>
-				<button type="submit" class= "btn btn-block mt-3 default-button text-white" id="saveBtn">저장</button>				
+				<button class= "btn btn-block mt-3 default-button text-white" id="saveBtn">저장</button>				
 			</div>
 		</section>
 		
 		 <script layout:fragment="script">
 		 $(document).ready(function(){
 			 var isduplicateName = true;
+			 $("#profileBtn").on("click", function() {
+		            let file = $("#fileInput")[0].files[0];
+
+		            if (file) {
+		            	let formData = new FormData();
+		            	formData.append("imageFile", file);
+		            	
+		            	$.ajax({
+							type:"put"
+							, url: "/user/profile/edit"
+							, data:formData
+							, enctype:"multipart/form-data"
+							, processData:false 
+							, contentType:false 
+							, success:function(response) {
+								if (response.result === 'success') {
+									if(response.result == "success") {
+										location.reload();
+								} else {
+									alert("변경 실패");
+									}
+								}
+							}
+		            		,error:function() {
+								alert("작성 에러");
+		            		}
+		            });
+		         }
+			 });
 			 
 			 $("#saveBtn").on("click", function(){
 				 let nickname = $("#editNicknameInput").val();
