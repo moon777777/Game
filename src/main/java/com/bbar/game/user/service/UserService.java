@@ -82,7 +82,7 @@ public class UserService {
 		}
 	}
 	
-	public boolean updateFile(int id, MultipartFile newFile) {
+	public String updateFile(int id, MultipartFile newFile) {
 		Optional<User> optionalUser = userRepository.findById(id);
 		User user = optionalUser.get();		
 		String oldFilePath = user.getImagePath();
@@ -90,7 +90,7 @@ public class UserService {
 	        try {
 	            FileManager.removeFile(oldFilePath);
 	        } catch (Exception e) {
-	            return false;
+	            return null;
 	        }
 	    }
 		String imagePath = FileManager.saveFile(id, newFile);
@@ -101,9 +101,9 @@ public class UserService {
 		
 		try {
 			userRepository.save(user);
-			return true;
+			return imagePath;
 		} catch(Exception e) {
-			return false;
+			return null;
 		}
 	}
 

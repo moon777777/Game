@@ -40,8 +40,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/edit-profile")
-	public String editProfile(HttpSession session, Model model) {
-
+	public String editProfile() {
 		return "user/editProfile";
 	}
 }
