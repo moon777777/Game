@@ -124,9 +124,7 @@ public class UserRestController {
 		int userId = (Integer)session.getAttribute("userId");
 		
 		Map<String, String> resultMap = new HashMap<>();
-		String imagePath = userService.updateFile(userId, file);
-		if(imagePath != null) {
-			session.setAttribute("userProfile", imagePath);
+		if(userService.updateFile(userId, file)) {
 			resultMap.put("result", "success");
 		} else {
 			resultMap.put("result", "fail");
