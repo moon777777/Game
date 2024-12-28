@@ -10,7 +10,7 @@
 				<h4 class="text-center">계정 회원가입</h4>
 				<div class="d-flex">
 					<input type="text" class="form-control mt-4" id="idInput" placeholder="이메일">
-					<button class= "btn mt-4 ml-2 default-button text-white" id="CodeBtn">인증</button>					
+					<button class= "btn mt-4 ml-2 default-button text-white" id="sendBtn">메일 발송</button>					
 				</div>
 				<div class="text-danger small d-none" id="duplicateEmail">이미 가입된 이메일 주소입니다.</div>
 				<div class="text-success small d-none" id="availableEmail">사용가능한 이메일 주소입니다.</div>
@@ -32,6 +32,32 @@
         		
         		var isduplicateId = true;
         		var isduplicateName = true;
+        		
+        		$('#sendBtn').click(function() {
+        	        let email = $('#idInput').val();
+
+        	        if (email == "") {
+        	            alert("이메일을 입력해주세요.");
+        	            return;
+        	        }
+        	        
+        	        $.ajax({
+        	        	type:"post"
+        	        	, url:"/mail/send"
+        	        	, data:{"email":email}
+        	        	, success:function(response){
+        	        		if(response.result == "success") {
+        						alert("메일이 발송되었습니다.");
+        	        		} else {
+        	        			alert("발송 실패");
+        	        		}
+        	        	}
+        	        	, error:function() {
+        	        		alert("발송 에러");
+        	        	}
+        	        });
+        		});
+        		
         		
         		$("#nicknameInput").on("input", function(){
         			let nickname = $("#nicknameInput").val();

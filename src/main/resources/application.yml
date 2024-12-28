@@ -20,5 +20,18 @@ spring:
     application:
         name: zzz
 
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: moonyj6380@gmail.com
+        password: ydefvxbrtvvqpegj
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+                        required: true
 mybatis:
     mapper-locations: mappers/*Mapper.xml
+    

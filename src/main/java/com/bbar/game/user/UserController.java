@@ -53,6 +53,7 @@ public class UserController {
 	public String editProfile(HttpSession session, Model model) {
 		int userId = (Integer)session.getAttribute("userId");
 		User profile = userService.getUser(userId);
+		
 		model.addAttribute("profile", profile);
 		return "user/editProfile";
 	}

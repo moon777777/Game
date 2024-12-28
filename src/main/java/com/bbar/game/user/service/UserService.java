@@ -84,8 +84,11 @@ public class UserService {
 	
 	public boolean updateFile(int id, MultipartFile newFile) {
 		Optional<User> optionalUser = userRepository.findById(id);
-		User user = optionalUser.get();		
+		
+		User user = optionalUser.get();
+		
 		String oldFilePath = user.getImagePath();
+		
 		if (oldFilePath != null) {
 	        try {
 	            FileManager.removeFile(oldFilePath);

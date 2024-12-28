@@ -9,12 +9,15 @@
 				<div></div>
 				<div class="d-flex justify-content-center">
 					<div class="profile-box d-flex justify-content-center align-items-center">
-						<label for="fileInput"><img th:src="${profile.imagePath}"></label>
+						<label for="fileInput">
+							<img th:unless="${profile.imagePath == null}" th:src="${profile.imagePath}">
+							<img th:if="${profile.imagePath == null}" src="/static/images/default_img.webp">
+						</label>
 						<input type="file" class="d-none" id="fileInput">
 					</div>
 				</div>
 				<div class="d-flex justify-content-center mt-2">
-					<button class= "btn mt-3 default-button text-white btn-sm" id="profileBtn">프로필 이미지 변경</button>				
+					<button class= "btn mt-3 default-button text-white btn-sm" id="profileBtn">프로필 이미지 변경 저장</button>				
 				</div>
 				<h5 class="mt-4">닉네임</h5>
 				<input type="text" class="form-control mt-2" id="editNicknameInput" th:value="${session.userNickname}">
