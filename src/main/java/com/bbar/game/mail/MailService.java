@@ -22,6 +22,8 @@ public class MailService {
         this.javaMailSender = javaMailSender;
     }
     
+    private Map<String, Integer> emailCode = new HashMap<>();
+    
     public void createNumber() {
     	Random random = new Random();
     	number = random.nextInt(900000) + 100000;
@@ -53,15 +55,13 @@ public class MailService {
     public int sendMail(String mail) {
         MimeMessage message = createMail(mail);
         javaMailSender.send(message); // 결국 얘를 호출
-        Map<String, Integer> emailCode = new HashMap<>();
         emailCode.put(mail, number);
         return number;
     }
     
     public boolean verifyCode(String email, int code) {
-    	Map<String, Integer> emailCode = new HashMap<>();
     	Integer getCode = emailCode.get(email);
-    	return getCode == code;
+    	return getCode != null && getCode == code;
     }
 
 }
