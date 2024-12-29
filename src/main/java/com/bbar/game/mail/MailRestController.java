@@ -31,5 +31,19 @@ public class MailRestController {
     	 return resultMap;
         
     }
+    
+    @PostMapping("/verify")
+    public Map<String, String> verifyCode(
+    		@RequestParam("email") String email
+    		, @RequestParam("code") int code) {
+        Map<String, String> resultMap = new HashMap<>();
+        
+        if (mailService.verifyCode(email, code)) {
+            resultMap.put("result", "success");
+        } else {
+            resultMap.put("result", "fail");
+        }
+        return resultMap;
+    }
 
 }

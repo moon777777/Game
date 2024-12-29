@@ -14,7 +14,12 @@
 				</div>
 				<div class="text-danger small d-none" id="duplicateEmail">이미 가입된 이메일 주소입니다.</div>
 				<div class="text-success small d-none" id="availableEmail">사용가능한 이메일 주소입니다.</div>
-				<input type="text" class="form-control mt-2" id="emailInput" placeholder="이메일 인증코드">
+				<div class="d-flex">
+					<input type="text" class="form-control mt-2" id="codeInput" placeholder="이메일 인증코드">
+					<button class= "btn mt-2 ml-2 default-button text-white" id="verifyBtn">인증 확인</button>
+				</div>
+				<div class="text-success small d-none" id="verifySuccess">인증 완료</div>
+				<div class="text-danger small d-none" id="verifyFail">인증 실패</div>
 				<input type="password" class="form-control mt-2" id="passwordInput" placeholder="비밀번호">
 				<input type="password" class="form-control mt-2" id="passwordConfirmInput" placeholder="비밀번호확인">
 				<input type="text" class="form-control mt-2" id="nicknameInput" placeholder="닉네임">
@@ -32,6 +37,44 @@
         		
         		var isduplicateId = true;
         		var isduplicateName = true;
+        		var verifyCode = true;
+        		
+        		$('#verifyBtn').on('click', function(){
+        			let code = $("#codeInput").val();
+        			let email = $('#idInput').val();
+        			
+        			if (code == "") {
+        	            alert("인증코드를 입력해주세요.");
+        	            return;
+        	        }
+        			
+        			$.ajax({
+        				type:"post"
+        				, url:"/mail/verify"
+        				, data:{"email":email, "code":code}
+        				, success:function(response){
+        					if(response.result == "success"){
+        						$("#verifySuccess").removeClass("d-none");
+        						$("#verifyFail").addClass("d-none");
+        						alert("인증이 완료되었습니다.");
+        						verifyCode = false;
+        					} else{
+        						$("#verifySuccess").addClass("d-none");
+        						$("#verifyFail").removeClass("d-none");
+        						alert("인증이 실패되었습니다.");
+        						verifyCode = true;
+        					}
+        				}
+        				, error:function(){
+        					alert("인증 에러");
+        				}
+        			});
+        		});
+        		
+        		$("#codeInput").on("input", function() {
+					$("#verifySuccess").addClass("d-none");
+					$("#verifyFail").addClass("d-none");
+				});
         		
         		$('#sendBtn').click(function() {
         	        let email = $('#idInput').val();
@@ -140,11 +183,17 @@
         			let password = $("#passwordInput").val();
         			let passwordConfirm = $("#passwordConfirmInput").val();
         			let nickname = $("#nicknameInput").val();
+        			let code = $("#codeInput").val();
         			
         			if(loginId == ""){
         				alert("이메일을 입력해주세요");
         				return;
         			}
+        			
+        			if (code == "") {
+        	            alert("인증코드를 입력해주세요.");
+        	            return;
+        	        }
         			
         			if(password == "") {
 						alert("비밀번호를 입력하세요");
@@ -168,6 +217,11 @@
         			
         			if(isduplicateName) {
 						alert("중복된 닉네임 입니다");
+						return;
+					}
+        			
+        			if(verifyCode) {
+						alert("인증이 확인되지 않았습니다");
 						return;
 					}
         			

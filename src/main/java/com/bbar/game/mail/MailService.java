@@ -1,5 +1,7 @@
 package com.bbar.game.mail;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import org.springframework.mail.javamail.JavaMailSender;
@@ -51,7 +53,15 @@ public class MailService {
     public int sendMail(String mail) {
         MimeMessage message = createMail(mail);
         javaMailSender.send(message); // 결국 얘를 호출
+        Map<String, Integer> emailCode = new HashMap<>();
+        emailCode.put(mail, number);
         return number;
+    }
+    
+    public boolean verifyCode(String email, int code) {
+    	Map<String, Integer> emailCode = new HashMap<>();
+    	Integer getCode = emailCode.get(email);
+    	return getCode == code;
     }
 
 }
