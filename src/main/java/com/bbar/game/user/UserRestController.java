@@ -132,6 +132,20 @@ public class UserRestController {
 		return resultMap;
 	}
 	
+	@PostMapping("/password/change")
+	public Map<String, String> chagnePassword(
+			@RequestParam("loginId") String loginId
+			, @RequestParam("password") String password){
+		
+		Map<String, String> resultMap = new HashMap<>();
+		if(userService.changePassword(loginId, password)) {
+			resultMap.put("result", "success");
+		} else {
+			resultMap.put("result", "fail");
+		}
+		return resultMap;
+	}
+	
 	
 
 }

@@ -44,11 +44,6 @@ public class UserController {
 		return "redirect:/user/login-view";
 	}
 	
-	@GetMapping("/edit-password")
-	public String editPassword() {
-		return "user/password";
-	}
-	
 	@GetMapping("/edit-profile")
 	public String editProfile(HttpSession session, Model model) {
 		int userId = (Integer)session.getAttribute("userId");
@@ -56,5 +51,10 @@ public class UserController {
 		
 		model.addAttribute("profile", profile);
 		return "user/editProfile";
+	}
+	
+	@GetMapping("/edit-password")
+	public String editPassword() {
+		return "user/editPassword";
 	}
 }

@@ -39,6 +39,23 @@ public class UserService {
 		}
 	}
 	
+	public boolean changePassword(String loginId, String newPassword) {
+		String salt = MD5HashingEncoder.createSalt();
+		String endcodingPassword = MD5HashingEncoder.encode(newPassword, salt);
+		
+		User user = userRepository.findByLoginId(loginId);
+		
+		user.setPassword(endcodingPassword);
+	    user.setSalt(salt);
+		
+		try {
+			userRepository.save(user);
+			return true;
+		} catch(Exception e) {
+			return false;
+		}
+	}
+	
 	public boolean isDuplicateLoginId(String loginId) {
 		int count = userRepository.countByloginId(loginId);
 		
