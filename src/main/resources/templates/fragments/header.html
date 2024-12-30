@@ -3,20 +3,29 @@
 		<div class="d-flex align-items-end">
 			<h1 class="ml-3">BBAR</h1>
 			<h4 class="ml-4">메인</h4>
-			<h4 class="ml-4">ZZZ</h4>
+			<h4 class="ml-4"><a href="/post/list-view" class="text-white">ZZZ</a></h4>
 		</div>
 		
 		<!-- 검색 -->
-		<div class="search-bar d-flex align-items-center p-2">
-		    <input type="text" class="search-input">
-		    <button class="search-button">
-		        <i class="bi bi-search"></i>
-		    </button>
+		<div th:if="${session.userId != null}">
+			<div class="search-bar d-flex align-items-center p-2">
+			    <input type="text" class="search-input">
+			    <button class="search-button">
+			        <i class="bi bi-search"></i>
+			    </button>
+			</div>		
 		</div>
 	
 		<!--프로필-->
-		<div>
+		<div class="d-flex">
 			<div th:if="${session.userId != null}" class="mr-4">
+				<div class="pen-icon">
+					<i class="bi bi-pencil mr-5"></i>
+					<div class="menu">
+						<a href="/post/create-view" class="text-white"><i class="bi bi-pen-fill text-success"></i> 글쓰기 <i class="bi bi-chevron-compact-right ml-5"></i></a>
+				    	<a href="#" class="text-white"><i class="bi bi-camera-video-fill text-info"></i> 동영상 <i class="bi bi-chevron-compact-right ml-5"></i></a>
+				    </div>			
+				</div>
 				<span th:text="|${session.userNickname}님|"></span><a href="/user/logout"> 로그아웃</a>
 			</div>
 		</div>

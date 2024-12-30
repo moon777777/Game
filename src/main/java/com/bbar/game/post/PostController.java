@@ -12,5 +12,15 @@ public class PostController {
 	public String profile() {
 		return "post/profile";
 	}
+	
+	@GetMapping("/create-view")
+	public String inputBoard() {
+		return "post/input";
+	}
+	
+	@GetMapping("/list-view")
+	public String listBoard() {
+		return "post/list";
+	}
 
 }
