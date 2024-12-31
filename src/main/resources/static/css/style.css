@@ -65,6 +65,23 @@ a:hover {
     display: inline-block;
 }
 
+.bd-search {
+	width:150px;
+    background-color: white;
+    border: none;
+    outline: none;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.bd-button {
+    background: none;
+    border: none;
+    background-color: white;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+
 .menu {	
 	display: none;
 	position: absolute;
