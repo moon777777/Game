@@ -53,8 +53,10 @@ public class PostController {
 	
 	@GetMapping("/detail-view/{id}")
 	public String deatilBoard(@PathVariable("id") int id
-			, Model model) {
-		BoardDTO post = postService.getPost(id);
+			, Model model
+			, HttpSession session) {
+		Integer userId = (Integer) session.getAttribute("userId");
+		BoardDTO post = postService.getPost(id, userId);
 		model.addAttribute("post", post);
 		return "post/detail";
 	}

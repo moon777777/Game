@@ -17,5 +17,8 @@ public class BoardDTO {
 	private String nickname;
 	private String imagePath;
 	private LocalDateTime createdAt;
+	
+	private int likeCount;
+	private boolean isLike;
 
 }
