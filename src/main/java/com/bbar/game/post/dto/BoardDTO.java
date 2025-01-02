@@ -1,6 +1,9 @@
 package com.bbar.game.post.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import com.bbar.game.comment.DTO.CommentDTO;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -20,5 +23,7 @@ public class BoardDTO {
 	
 	private int likeCount;
 	private boolean isLike;
+	
+	private List<CommentDTO> commentList; 
 
 }

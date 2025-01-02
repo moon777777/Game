@@ -36,14 +36,54 @@
 					</div>				
 				</div>
 				<div class="d-flex">
-					<input type="text" class="comment-box ml-4 mb-3 text-white" placeholder="댓글을 입력하세요">
-					<button class= "btn mb-3 ml-2 comment-button text-white" id="saveBtn">등록</button>
+					<input type="text" class="comment-box ml-4 mb-3 text-white" id="commentInput" placeholder="댓글을 입력하세요">
+					<button type="button" class= "btn mb-3 ml-2 comment-button text-white" th:data-post-id="${post.postId}">등록</button>
 				</div>
+				<table class="table">
+				    <tbody>
+				        <tr th:each="comment : ${post.commentList}">
+				            <td th:text="${comment.nickname}"></td>
+				            <td th:text="${comment.contents}"></td>
+				        </tr>
+				        <tr>
+				        	<td></td>
+				        	<td></td>
+				        </tr>
+				    </tbody>
+				</table>
 			</div>
 		</section>
 		
 		 <script layout:fragment="script">
 			$(document).ready(function(){
+				
+				$(".comment-button").on("click", function(){
+					let postId = $(this).data("post-id");
+        			let comment = $("#commentInput").val();
+        			
+        			if(comment == "") {
+        				alert("댓글을 입력해주세요");
+        				return;
+        			}
+        			
+        			$.ajax({
+        				type:"post"
+        				, url: "/post/comment/create"
+        				, data:{"postId":postId,"contents":comment}
+        				, success:function(response) {
+        					if(response.result == "success") {
+								location.reload();
+							} else {
+								alert("댓글 실패");
+							}
+        				}
+        				,error:function() {
+        					alert("댓글 에러!");	
+        				}
+        				 
+        			});
+        			
+				});
 				
 				$(".unlikeBtn").on("click", function(){
 					let targetType = $(this).data("type");

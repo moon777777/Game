@@ -40,7 +40,7 @@
 				                th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}"></span>
 			                </td>
 			                <td>역시</td> <!-- 조회수 -->
-			                <td>DTO</td> <!-- 추천 -->
+			                <td th:text="${post.likeCount}">DTO</td> <!-- 추천 -->
 			            </tr>
 			            <tr>
 			            	<td></td>
