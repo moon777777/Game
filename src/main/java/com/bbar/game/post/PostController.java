@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bbar.game.post.domain.Post;
+import com.bbar.game.post.dto.BoardDTO;
 import com.bbar.game.post.service.PostService;
 
 import jakarta.servlet.http.HttpSession;
@@ -44,7 +45,7 @@ public class PostController {
 		LocalDate localDate = LocalDate.now();
 		model.addAttribute("localDate", localDate);
 		
-		List<Post> postList = postService.getPostList(userId);
+		List<BoardDTO> postList = postService.getPostList(userId);
 		
 		model.addAttribute("postList", postList);
 		return "post/list";
@@ -53,7 +54,8 @@ public class PostController {
 	@GetMapping("/detail-view/{id}")
 	public String deatilBoard(@PathVariable("id") int id
 			, Model model) {
-
+		BoardDTO post = postService.getPost(id);
+		model.addAttribute("post", post);
 		return "post/detail";
 	}
 

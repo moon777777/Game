@@ -25,18 +25,22 @@
 			        </thead>
 			        <tbody>
 			            <tr class="small" th:each="post:${postList}">
-			                <td th:text="${post.id}"></td>
-			                <td th:text="${post.title}"></td>
-			                <td>DTO 만들어야겠지?</td>
-			                <td>
+			                <td th:text="${post.postId}"></td>
+			                <td><a th:href="|/post/detail-view/${post.postId}|" th:text="${post.title}" class="text-white"></a></td>
+			                <td th:text="${post.nickname}">DTO 만들어야겠지?</td> <!-- 작성자 -->
+			                <td> <!-- 작성일 -->
 				                <span th:if="${#temporals.format(post.createdAt, 'yyyy-MM-dd') == #temporals.format(localDate, 'yyyy-MM-dd')}"
       								th:text="${#temporals.format(post.createdAt, 'HH:mm')}"></span>
       								
-				                <span th:unless="${#temporals.format(post.createdAt, 'yyyy-MM-dd') == #temporals.format(localDate, 'yyyy-MM-dd')}"
+      							<span th:if="${#temporals.format(post.createdAt, 'MM-dd') != #temporals.format(localDate, 'MM-dd') 
+      							and #temporals.format(post.createdAt, 'yyyy') == #temporals.format(localDate, 'yyyy')}"
+      								th:text="${#temporals.format(post.createdAt, 'MM-dd')}"></span>
+      								
+				                <span th:unless="${#temporals.format(post.createdAt, 'yyyy') == #temporals.format(localDate, 'yyyy')}"
 				                th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}"></span>
 			                </td>
-			                <td>역시</td>
-			                <td>DTO</td>
+			                <td>역시</td> <!-- 조회수 -->
+			                <td>DTO</td> <!-- 추천 -->
 			            </tr>
 			            <tr>
 			            	<td></td>
