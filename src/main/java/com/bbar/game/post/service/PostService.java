@@ -72,6 +72,7 @@ public class PostService {
 		
 		User user = userService.getUser(post.getUserId());
 		boolean isLike = likeService.isLike(post.getId(), "post", userId);
+		int likeCount = likeService.getLikeCount("post", post.getId());
 		
 		 BoardDTO board = BoardDTO.builder()
         .postId(post.getId())
@@ -82,6 +83,7 @@ public class PostService {
         .nickname(user.getNickname())
         .createdAt(post.getCreatedAt())
         .isLike(isLike)
+        .likeCount(likeCount)
         .build();
 		 
 		 return board;

@@ -30,8 +30,9 @@
 					</div>
 					<div class="d-flex p-2">
 						<h4><i class="bi bi-chat-left-text-fill"></i></h4>
-						<h4><i th:if="${post.isLike}" class="bi bi-hand-thumbs-up-fill ml-5 mr-5 unlikeBtn" th:data-type="post" th:data-id="${post.postId}"></i></h4>
-						<h4><i th:unless="${post.isLike}" class="bi bi-hand-thumbs-up ml-5 mr-5 likeBtn" th:data-type="post" th:data-id="${post.postId}"></i></h4>
+						<h4><i th:if="${post.isLike}" class="bi bi-hand-thumbs-up-fill ml-5 unlikeBtn" th:data-type="post" th:data-id="${post.postId}"></i></h4>
+						<h4><i th:unless="${post.isLike}" class="bi bi-hand-thumbs-up ml-5 likeBtn" th:data-type="post" th:data-id="${post.postId}"></i></h4>
+						<span th:text="${post.likeCount}" class="ml-1 mt-1 mr-4"></span>
 					</div>				
 				</div>
 				<div class="d-flex">

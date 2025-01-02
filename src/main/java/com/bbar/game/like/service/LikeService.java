@@ -53,5 +53,9 @@ public class LikeService {
 			return false;
 		}
 	}
+	
+	public int getLikeCount(String targetType, int targetId) {
+		return likeRepository.countByTargetTypeAndTargetId(targetType, targetId);
+	}
 
 }
