@@ -5,7 +5,7 @@
         layout:decorate="~{layout/default}">
         
         <section layout:fragment="contents" class="contents d-flex justify-content-center mb-5">
-			<div class="create-box rounded my-1">
+			<div class="default-box rounded my-1">
 				<h4 class="ml-2 mt-2">글쓰기</h4>
 				<hr>
 				<div class="p-5">
@@ -45,6 +45,7 @@
 						, success: function(response){
 							if(response.result="success"){
 								alert("게시물이 등록되었습니다.");
+								location.href="/post/list-view"
 							} else{
 								alert("게시물이 등록을 실패하였습니다.");
 							}

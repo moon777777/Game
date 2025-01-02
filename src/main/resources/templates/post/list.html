@@ -14,7 +14,7 @@
 			    </nav>
 			    <table class="table text-center">
 			        <thead>
-			            <tr>
+			            <tr class="small">
 			                <th>No</th>
 			                <th>제목</th>
 			                <th>작성자</th>
@@ -24,11 +24,17 @@
 			            </tr>
 			        </thead>
 			        <tbody>
-			            <tr th:each="post:${postList}">
+			            <tr class="small" th:each="post:${postList}">
 			                <td th:text="${post.id}"></td>
 			                <td th:text="${post.title}"></td>
-			                <td>DTO 적용해야겠지?</td>
-			                <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}"></td>
+			                <td>DTO 만들어야겠지?</td>
+			                <td>
+				                <span th:if="${#temporals.format(post.createdAt, 'yyyy-MM-dd') == #temporals.format(localDate, 'yyyy-MM-dd')}"
+      								th:text="${#temporals.format(post.createdAt, 'HH:mm')}"></span>
+      								
+				                <span th:unless="${#temporals.format(post.createdAt, 'yyyy-MM-dd') == #temporals.format(localDate, 'yyyy-MM-dd')}"
+				                th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}"></span>
+			                </td>
 			                <td>역시</td>
 			                <td>DTO</td>
 			            </tr>

@@ -1,10 +1,12 @@
 package com.bbar.game.post;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bbar.game.post.domain.Post;
@@ -39,10 +41,20 @@ public class PostController {
 		
 		int userId = (Integer)session.getAttribute("userId");
 		
+		LocalDate localDate = LocalDate.now();
+		model.addAttribute("localDate", localDate);
+		
 		List<Post> postList = postService.getPostList(userId);
 		
 		model.addAttribute("postList", postList);
 		return "post/list";
+	}
+	
+	@GetMapping("/detail-view/{id}")
+	public String deatilBoard(@PathVariable("id") int id
+			, Model model) {
+
+		return "post/detail";
 	}
 
 }
