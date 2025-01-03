@@ -19,7 +19,5 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 	@Transactional
 	@Query("update Post p set p.viewCount = p.viewCount + 1 where p.id = :id")
 	public int updateView(@Param("id") int id);
-	
-	
 
 }

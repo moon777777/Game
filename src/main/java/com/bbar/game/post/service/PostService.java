@@ -57,7 +57,6 @@ public class PostService {
 			int likeCount = likeService.getLikeCount("post", post.getId());
 			int commentCount = commentService.getCommentCount(post.getId());
 			
-			
 			BoardDTO board = BoardDTO.builder()
 			.postId(post.getId())
 			.userId(userId)
@@ -68,6 +67,7 @@ public class PostService {
 			.createdAt(post.getCreatedAt())
 			.likeCount(likeCount)
 			.commentCount(commentCount)
+			.viewCount(post.getViewCount())
 			.build();
 			
 			boardList.add(board);
@@ -84,9 +84,8 @@ public class PostService {
 		int likeCount = likeService.getLikeCount("post", post.getId());
 		int commentCount = commentService.getCommentCount(post.getId());
 		postRepository.updateView(id);
-		
+
 		post = postRepository.findById(id).orElse(null);
-		
 		List<CommentDTO> commentList = commentService.getCommentList(post.getId(), userId);
 		
 		 BoardDTO board = BoardDTO.builder()
@@ -106,10 +105,6 @@ public class PostService {
 		 
 		 return board;
 		
-	}
-	
-	public int updateView(int postId) {
-		return postRepository.updateView(postId);
 	}
 
 }

@@ -126,6 +126,10 @@ a:hover {
     display: inline-block;
 }
 
+.viewNum {
+	margin-top: 10px;
+}
+
 .bd-search {
 	width:150px;
     background-color: white;
