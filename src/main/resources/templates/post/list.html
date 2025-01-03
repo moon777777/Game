@@ -42,7 +42,7 @@
 				                <span th:unless="${#temporals.format(post.createdAt, 'yyyy') == #temporals.format(localDate, 'yyyy')}"
 				                th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}"></span>
 			                </td>
-			                <td>역시</td> <!-- 조회수 -->
+			                <td th:text="${post.viewCount}">역시</td> <!-- 조회수 -->
 			                <td th:text="${post.likeCount}">DTO</td> <!-- 추천 -->
 			            </tr>
 			            <tr>

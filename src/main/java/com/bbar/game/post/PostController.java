@@ -59,7 +59,7 @@ public class PostController {
 			, HttpSession session) {
 		Integer userId = (Integer) session.getAttribute("userId");
 		BoardDTO post = postService.getPost(id, userId);
-		List<CommentDTO> commentList = commentService.getCommentList(id, userId);
+		postService.updateView(id);
 		model.addAttribute("post", post);
 		return "post/detail";
 	}

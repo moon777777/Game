@@ -40,6 +40,9 @@ public class Post {
 	@UpdateTimestamp
 	@Column(name="updatedAt")
 	private LocalDateTime  updatedAt;
+	
+	@Column(name="viewCount")
+	private int viewCount;
 
 	
 }

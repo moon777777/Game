@@ -57,6 +57,7 @@ public class PostService {
 			int likeCount = likeService.getLikeCount("post", post.getId());
 			int commentCount = commentService.getCommentCount(post.getId());
 			
+			
 			BoardDTO board = BoardDTO.builder()
 			.postId(post.getId())
 			.userId(userId)
@@ -82,6 +83,9 @@ public class PostService {
 		boolean isLike = likeService.isLike(post.getId(), "post", userId);
 		int likeCount = likeService.getLikeCount("post", post.getId());
 		int commentCount = commentService.getCommentCount(post.getId());
+		postRepository.updateView(id);
+		
+		post = postRepository.findById(id).orElse(null);
 		
 		List<CommentDTO> commentList = commentService.getCommentList(post.getId(), userId);
 		
@@ -97,11 +101,15 @@ public class PostService {
         .likeCount(likeCount)
         .commentCount(commentCount)
         .commentList(commentList)
+        .viewCount(post.getViewCount())
         .build();
 		 
 		 return board;
 		
 	}
 	
+	public int updateView(int postId) {
+		return postRepository.updateView(postId);
+	}
 
 }
