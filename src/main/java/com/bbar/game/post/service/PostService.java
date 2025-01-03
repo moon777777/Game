@@ -20,7 +20,7 @@ public class PostService {
 	private PostRepository postRepository;
 	private UserService userService;
 	private LikeService likeService;
-	private CommentService commentService;
+	private CommentService commentService; 
 	
 	public PostService(PostRepository postRepository, UserService userService
 			, LikeService likeService, CommentService commentService) {
@@ -55,6 +55,7 @@ public class PostService {
 			int userId = post.getUserId();
 			User user = userService.getUser(userId);
 			int likeCount = likeService.getLikeCount("post", post.getId());
+			int commentCount = commentService.getCommentCount(post.getId());
 			
 			BoardDTO board = BoardDTO.builder()
 			.postId(post.getId())
@@ -65,6 +66,7 @@ public class PostService {
 			.nickname(user.getNickname())
 			.createdAt(post.getCreatedAt())
 			.likeCount(likeCount)
+			.commentCount(commentCount)
 			.build();
 			
 			boardList.add(board);
@@ -79,8 +81,9 @@ public class PostService {
 		User user = userService.getUser(post.getUserId());
 		boolean isLike = likeService.isLike(post.getId(), "post", userId);
 		int likeCount = likeService.getLikeCount("post", post.getId());
+		int commentCount = commentService.getCommentCount(post.getId());
 		
-		List<CommentDTO> commentList = commentService.getCommentList(post.getId());
+		List<CommentDTO> commentList = commentService.getCommentList(post.getId(), userId);
 		
 		 BoardDTO board = BoardDTO.builder()
         .postId(post.getId())
@@ -92,6 +95,7 @@ public class PostService {
         .createdAt(post.getCreatedAt())
         .isLike(isLike)
         .likeCount(likeCount)
+        .commentCount(commentCount)
         .commentList(commentList)
         .build();
 		 

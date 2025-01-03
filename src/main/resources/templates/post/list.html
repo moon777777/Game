@@ -26,7 +26,10 @@
 			        <tbody>
 			            <tr class="small" th:each="post:${postList}">
 			                <td th:text="${post.postId}"></td>
-			                <td><a th:href="|/post/detail-view/${post.postId}|" th:text="${post.title}" class="text-white"></a></td>
+			                <td><a th:href="|/post/detail-view/${post.postId}|" th:text="${post.title}" class="text-white"></a>
+			                	<b class="ml-1"><span th:unless="${post.commentCount} == 0" th:text="|[${post.commentCount}]|"></span></b>
+			                </td>
+			                
 			                <td th:text="${post.nickname}">DTO 만들어야겠지?</td> <!-- 작성자 -->
 			                <td> <!-- 작성일 -->
 				                <span th:if="${#temporals.format(post.createdAt, 'yyyy-MM-dd') == #temporals.format(localDate, 'yyyy-MM-dd')}"

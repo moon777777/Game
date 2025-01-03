@@ -23,6 +23,7 @@ public class BoardDTO {
 	
 	private int likeCount;
 	private boolean isLike;
+	private int commentCount;
 	
 	private List<CommentDTO> commentList; 
 

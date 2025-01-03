@@ -7,7 +7,7 @@
         <section layout:fragment="contents" class="contents d-flex justify-content-center mb-5">
 			<div class="default-box rounded my-1" th:data-post-id="${post.postId}">
 				<div class="d-flex justify-content-between align-items-center">
-					<h4 class="ml-2 mt-2" th:text="${post.title}">제목</h4>
+					<h5 class="ml-2 mt-2" th:text="${post.title}">제목</h5>
 					<i class="bi bi-three-dots mr-3 option"></i>									
 				</div>
 				<hr>
@@ -21,7 +21,7 @@
 						<div class="ml-2 small" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></div>	
 					</div>
 				</div>
-				<div class="content mt-1 ml-4 p-2" th:text="${post.contents}">
+				<div class="content-font mt-1 ml-4 p-2" th:text="${post.contents}">
 					내용
 				</div>
 				<div class="d-flex justify-content-between">
@@ -30,34 +30,46 @@
 					</div>
 					<div class="d-flex p-2">
 						<h4><i class="bi bi-chat-left-text-fill"></i></h4>
-						<h4><i th:if="${post.isLike}" class="bi bi-hand-thumbs-up-fill ml-5 unlikeBtn" th:data-type="post" th:data-id="${post.postId}"></i></h4>
-						<h4><i th:unless="${post.isLike}" class="bi bi-hand-thumbs-up ml-5 likeBtn" th:data-type="post" th:data-id="${post.postId}"></i></h4>
+						<span th:text="${post.commentCount}" class="ml-2 mt-1"></span>
+						<h4><i th:if="${post.isLike}" class="bi bi-hand-thumbs-up-fill ml-4 unlikeBtn" th:data-type="post" th:data-id="${post.postId}"></i></h4>
+						<h4><i th:unless="${post.isLike}" class="bi bi-hand-thumbs-up ml-4 likeBtn" th:data-type="post" th:data-id="${post.postId}"></i></h4>
 						<span th:text="${post.likeCount}" class="ml-1 mt-1 mr-4"></span>
 					</div>				
 				</div>
-				<div class="d-flex">
-					<input type="text" class="comment-box ml-4 mb-3 text-white" id="commentInput" placeholder="댓글을 입력하세요">
-					<button type="button" class= "btn mb-3 ml-2 comment-button text-white" th:data-post-id="${post.postId}">등록</button>
+				<form id="commentForm" th:data-post-id="${post.postId}">
+					<div class="d-flex">
+						<input type="text" class="comment-input ml-4 mb-3 text-white" id="commentInput" placeholder="댓글을 입력하세요">
+						<button type="submit" class= "btn mb-3 ml-2 comment-button text-white" >등록</button>
+					</div>
+				</form>
+				<div th:each="comment : ${post.commentList}" class="d-flex justify-content-between mb-2 commentBox">
+					<div class="d-flex">
+						<div class="nanoProfile-box d-flex ml-4">
+							<img th:unless="${comment.imagePath == null}" th:src="${comment.imagePath}">
+							<img th:if="${comment.imagePath == null}" src="/static/images/default_img.webp">
+						</div>
+						<div class="ml-3">
+							<b class="commentName" th:text="${comment.nickname}"></b>
+							<div class="commentDate" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
+							<div th:text="${comment.contents}" class="content-font mt-2 mb-3"></div>					
+						</div>
+					</div>
+					<div class="d-flex align-items-end mb-2 mr-5">
+						<i class="bi bi-chat-dots-fill mr-5"></i>
+						<i th:if="${comment.isCommentLike}" class="bi bi-hand-thumbs-up-fill commentUnlikeBtn" th:data-type="comment" th:data-id="${comment.commentId}"></i>
+						<i th:unless="${comment.isCommentLike}" class="bi bi-hand-thumbs-up commentLikeBtn" th:data-type="comment"  th:data-id="${comment.commentId}"></i>
+						<span th:text="${comment.commentLikeCount}" class="ml-1"></span>
+					</div>						
 				</div>
-				<table class="table">
-				    <tbody>
-				        <tr th:each="comment : ${post.commentList}">
-				            <td th:text="${comment.nickname}"></td>
-				            <td th:text="${comment.contents}"></td>
-				        </tr>
-				        <tr>
-				        	<td></td>
-				        	<td></td>
-				        </tr>
-				    </tbody>
-				</table>
 			</div>
 		</section>
 		
 		 <script layout:fragment="script">
 			$(document).ready(function(){
 				
-				$(".comment-button").on("click", function(){
+				$("#commentForm").on("submit", function(e){
+					e.preventDefault();
+					
 					let postId = $(this).data("post-id");
         			let comment = $("#commentInput").val();
         			
@@ -82,8 +94,52 @@
         				}
         				 
         			});
-        			
 				});
+				
+				$(".commentUnlikeBtn").on("click", function(){
+					let targetType = $(this).data("type");
+        			let targetId = $(this).data("id");
+        			
+        			$.ajax({
+        				type:"delete"
+        				, url:"/post/unlike"
+        				, data:{"targetType": targetType 
+        		            , "targetId": targetId}
+        				, success:function(response) {
+        					if(response.result == "success") {
+        						location.reload();
+        					} else {
+        						alert("좋아요 취소 실패")
+        					}
+        				}
+        				, error:function() {
+        					alert("삭제 에러");
+        				}
+        			});		
+        		});
+				
+				$(".commentLikeBtn").on("click", function(){
+					let targetType = $(this).data("type");
+        			let targetId = $(this).data("id");
+        			
+        			$.ajax({
+        				type:"post"
+        				, url: "/post/like"
+        				, data:{"targetType": targetType 
+        		            , "targetId": targetId }
+        				, success:function(response) {
+        					if(response.result == "success") {
+								location.reload();
+							} else {
+								alert("좋아요 실패");
+							}
+        				}
+        				,error:function() {
+        					alert("좋아요 에러!");	
+        				}
+        				 
+        			});
+        		});
 				
 				$(".unlikeBtn").on("click", function(){
 					let targetType = $(this).data("type");
@@ -128,7 +184,6 @@
         				}
         				 
         			});
-        			
         		});
 			});
 		</script>

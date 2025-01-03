@@ -9,5 +9,7 @@ import com.bbar.game.comment.domain.Comment;
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
 	
 	public List<Comment> findByPostId(int postId);
+	
+	public int countByPostId(int postId);
 
 }

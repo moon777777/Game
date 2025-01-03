@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.bbar.game.post.domain.Post;
+import com.bbar.game.comment.DTO.CommentDTO;
+import com.bbar.game.comment.service.CommentService;
 import com.bbar.game.post.dto.BoardDTO;
 import com.bbar.game.post.service.PostService;
 
@@ -19,11 +20,12 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/post")
 public class PostController {
 	
-	private PostService postService;
+	private PostService postService; 
+	private CommentService commentService;
 	
-	public PostController(PostService postService) {
+	public PostController(PostService postService, CommentService commentService) {
 		this.postService = postService;
-
+		this.commentService = commentService;
 	}
 	
 	@GetMapping("/profile")
@@ -57,6 +59,7 @@ public class PostController {
 			, HttpSession session) {
 		Integer userId = (Integer) session.getAttribute("userId");
 		BoardDTO post = postService.getPost(id, userId);
+		List<CommentDTO> commentList = commentService.getCommentList(id, userId);
 		model.addAttribute("post", post);
 		return "post/detail";
 	}
