@@ -43,29 +43,33 @@
 						<button type="submit" class= "btn mb-3 ml-2 comment-button text-white" >등록</button>
 					</div>
 				</form>
-				<div th:each="comment : ${post.commentList}" class="d-flex justify-content-between mb-2 commentBox">
-					<div class="d-flex">
-						<div class="nanoProfile-box d-flex ml-4">
-							<img th:unless="${comment.imagePath == null}" th:src="${comment.imagePath}">
-							<img th:if="${comment.imagePath == null}" src="/static/images/default_img.webp">
+				<div th:each="comment : ${post.commentList}">
+					<div class="d-flex justify-content-between mb-2 commentBox">
+						<div class="d-flex">
+							<div class="nanoProfile-box d-flex ml-4">
+								<img th:unless="${comment.imagePath == null}" th:src="${comment.imagePath}">
+								<img th:if="${comment.imagePath == null}" src="/static/images/default_img.webp">
+							</div>
+							<div class="ml-3">
+								<b class="commentName" th:text="${comment.nickname}"></b>
+								<div class="commentDate" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
+								<div th:text="${comment.contents}" class="content-font mt-2 mb-3"></div>					
+							</div>
 						</div>
-						<div class="ml-3">
-							<b class="commentName" th:text="${comment.nickname}"></b>
-							<div class="commentDate" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
-							<div th:text="${comment.contents}" class="content-font mt-2 mb-3"></div>					
+						<div class="d-flex align-items-end mb-2 mr-5">
+							<i class="bi bi-chat-dots-fill mr-5 addReplyBtn" th:data-id="${comment.commentId}"></i>
+							<i th:if="${comment.isCommentLike}" class="bi bi-hand-thumbs-up-fill commentUnlikeBtn" th:data-type="comment" th:data-id="${comment.commentId}"></i>
+							<i th:unless="${comment.isCommentLike}" class="bi bi-hand-thumbs-up commentLikeBtn" th:data-type="comment"  th:data-id="${comment.commentId}"></i>
+							<span th:text="${comment.commentLikeCount}" class="ml-1"></span>
 						</div>
 					</div>
-					<div class="d-flex align-items-end mb-2 mr-5">
-						<i class="bi bi-chat-dots-fill mr-5"></i>
-						<i th:if="${comment.isCommentLike}" class="bi bi-hand-thumbs-up-fill commentUnlikeBtn" th:data-type="comment" th:data-id="${comment.commentId}"></i>
-						<i th:unless="${comment.isCommentLike}" class="bi bi-hand-thumbs-up commentLikeBtn" th:data-type="comment"  th:data-id="${comment.commentId}"></i>
-						<span th:text="${comment.commentLikeCount}" class="ml-1"></span>
-					</div>						
-				</div>
-				<div class="d-flex justify-content-end mr-4">
-					<i class="bi bi-arrow-return-right mr-3"></i>
-					<input type="text" class="reply-input mb-3 text-white" id="commentInput" placeholder="댓글을 입력하세요">
-					<button type="submit" class= "btn mb-3 ml-2 comment-button text-white" >등록</button>
+					<div class="reply-box d-none" th:data-id="${comment.commentId}">
+						<div class="d-flex justify-content-end mr-4">
+							<i class="bi bi-arrow-return-right mr-3"></i>
+							<input type="text" class="reply-input mb-3 text-white replyInput" th:data-id="${comment.commentId}" placeholder="댓글을 입력하세요">
+							<button type="button" class= "btn mb-3 ml-2 reply-button text-white" >등록</button>
+						</div>				
+					</div>
 				</div>
 			</div>
 		</section>
@@ -100,6 +104,22 @@
         				}
         				 
         			});
+				});
+				
+				$(".addReplyBtn").on("click", function(){
+					let targetId = $(this).data("id");
+					 $(".reply-box[data-id='" + targetId + "']").toggleClass("d-none");
+				});
+				
+				
+				
+				$(".reply-button").on("click", function(){
+					let reply = $("#replyInput").val();
+					
+					if(reply == "") {
+        				alert("댓글을 입력해주세요");
+        				return;
+        			}
 				});
 				
 				$(".commentUnlikeBtn").on("click", function(){
