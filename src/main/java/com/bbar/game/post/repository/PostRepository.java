@@ -15,9 +15,10 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 	
 	public List<Post> findAllByOrderByIdDesc();
 	
-	@Modifying
+	@Modifying(clearAutomatically = true)
 	@Transactional
-	@Query("update Post p set p.viewCount = p.viewCount + 1 where p.id = :id")
+	@Query(value = "UPDATE post SET viewCount = viewCount + 1 WHERE id = :id", nativeQuery = true)
 	public int updateView(@Param("id") int id);
+	// 검증
 
 }
