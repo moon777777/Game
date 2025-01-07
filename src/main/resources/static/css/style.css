@@ -109,6 +109,14 @@ a:hover {
 	font-size:15px;
 }
 
+.replyDate {
+	font-size:10px;
+}
+
+.replyName {
+	font-size:15px;
+}
+
 .commentBox:last-child {
     border-bottom: none;
 }
@@ -128,6 +136,32 @@ a:hover {
 
 .addReplyBtn {
     cursor: pointer;
+}
+
+.option {
+    cursor: pointer;
+}
+
+.option-btn {
+	display: block;
+	padding: 7px;
+	color: white;
+	background: none;
+	border: none;
+	width: 100%;
+	cursor: pointer;
+}
+
+.option-btn:hover {
+  background-color:  #202D3B;
+}
+
+.option-menu {
+	position: absolute;
+	top: 150px;
+	right: 150px;
+	background-color: #2C3E50;
+	border: 1px solid #ddd;
 }
 
 .reply-button {
@@ -183,6 +217,21 @@ a:hover {
 
 .menu a:hover {
     background-color: #202D3B;
+}
+
+.write {
+        background-color: #333;
+        padding: 10px;
+        border-radius: 5px;
+}
+.write a {
+    display: block;
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+}
+.write a:hover {
+    background-color: #444;
 }
 
 #wrap{

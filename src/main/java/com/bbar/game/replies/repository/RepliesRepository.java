@@ -9,5 +9,4 @@ import com.bbar.game.replies.domain.Replies;
 public interface RepliesRepository extends JpaRepository<Replies, Integer> {
 	
 	List<Replies> findByCommentId(int commentId);
-
 }

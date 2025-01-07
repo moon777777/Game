@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.bbar.game.comment.DTO.CommentDTO;
 import com.bbar.game.comment.service.CommentService;
 import com.bbar.game.post.dto.BoardDTO;
 import com.bbar.game.post.service.PostService;
@@ -36,6 +35,18 @@ public class PostController {
 	@GetMapping("/create-view")
 	public String inputBoard() {
 		return "post/input";
+	}
+	
+	@GetMapping("/update/{postId}")
+	public String updateBoard(@PathVariable("postId") String postId
+			, Model model
+			, HttpSession session) {
+		
+		int id = Integer.parseInt(postId);
+		Integer userId = (Integer) session.getAttribute("userId");
+		BoardDTO post = postService.getPost(id, userId);
+		model.addAttribute("post", post);
+		return "post/update";
 	}
 	
 	@GetMapping("/list-view")

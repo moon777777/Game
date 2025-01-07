@@ -8,7 +8,11 @@
 			<div class="default-box rounded my-1" th:data-post-id="${post.postId}">
 				<div class="d-flex justify-content-between align-items-center">
 					<h5 class="ml-2 mt-2" th:text="${post.title}">제목</h5>
-					<i class="bi bi-three-dots mr-3 option"></i>									
+					<i class="bi bi-three-dots mr-3 option"></i>
+					<div class="option-menu d-none">
+						<a th:href="@{/post/update/{postId}(postId=${post.postId})}" class="option-btn">게시물 수정</a>
+						<a class="option-btn">게시물 삭제</a>
+					</div>									
 				</div>
 				<hr>
 				<div class="d-flex p-2">
@@ -63,11 +67,30 @@
 							<span th:text="${comment.commentLikeCount}" class="ml-1"></span>
 						</div>
 					</div>
+					<div th:each="reply : ${comment.repliesList}" class="d-flex justify-content-between mb-2">
+						<div class="d-flex">
+							<i class="bi bi-arrow-return-right ml-5"></i>
+							<div class="nanoProfile-box d-flex ml-4">
+								<img th:unless="${reply.imagePath == null}" th:src="${reply.imagePath}">
+								<img th:if="${reply.imagePath == null}" src="/static/images/default_img.webp">
+							</div>
+							<div class="ml-3">
+								<b class="replyName" th:text="${reply.nickname}">닉네임</b>
+								<div class="replyDate" th:text="${#temporals.format(reply.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
+								<div class="content-font mt-2 mb-3" th:text="${reply.contents}">내용</div>					
+							</div>
+						</div>
+						<div class="d-flex align-items-end mb-2 mr-5">
+							<i th:if="${reply.isRepliesLike}" class="bi bi-hand-thumbs-up-fill replyUnlikeBtn" th:data-type="reply" th:data-reply-id="${reply.repliesId}"></i>
+							<i th:unless="${reply.isRepliesLike}" class="bi bi-hand-thumbs-up replyLikeBtn" th:data-type="reply"  th:data-reply-id="${reply.repliesId}"></i>
+							<span th:text="${reply.repliesLikeCount}" class="ml-1"></span>
+						</div>
+					</div>
 					<div class="reply-box d-none" th:data-id="${comment.commentId}">
 						<div class="d-flex justify-content-end mr-4">
 							<i class="bi bi-arrow-return-right mr-3"></i>
 							<input type="text" class="reply-input mb-3 text-white replyInput" th:data-id="${comment.commentId}" placeholder="댓글을 입력하세요">
-							<button type="button" class= "btn mb-3 ml-2 reply-button text-white" >등록</button>
+							<button type="button" class= "btn mb-3 ml-2 reply-button text-white" th:data-id="${comment.commentId}">등록</button>
 						</div>				
 					</div>
 				</div>
@@ -76,6 +99,10 @@
 		
 		 <script layout:fragment="script">
 			$(document).ready(function(){
+				
+				$(".option").on("click", function(){
+					 $(".option-menu").toggleClass("d-none");
+				});
 				
 				$("#commentForm").on("submit", function(e){
 					e.preventDefault();
@@ -114,12 +141,31 @@
 				
 				
 				$(".reply-button").on("click", function(){
-					let reply = $("#replyInput").val();
+					let targetId = $(this).data("id");
+					let reply = $(this).prev(".reply-input").val();
+					let postId = $(this).data("post-id");
 					
 					if(reply == "") {
         				alert("댓글을 입력해주세요");
         				return;
         			}
+					
+					$.ajax({
+        				type:"post"
+        				, url: "/post/replies/create"
+        				, data:{"commentId":targetId,"contents":reply}
+        				, success:function(response) {
+        					if(response.result == "success") {
+								location.reload();
+							} else {
+								alert("댓글 실패");
+							}
+        				}
+        				,error:function() {
+        					alert("댓글 에러!");	
+        				}
+        				 
+        			});
 				});
 				
 				$(".commentUnlikeBtn").on("click", function(){
@@ -131,6 +177,51 @@
         				, url:"/post/unlike"
         				, data:{"targetType": targetType 
         		            , "targetId": targetId}
+        				, success:function(response) {
+        					if(response.result == "success") {
+        						location.reload();
+        					} else {
+        						alert("좋아요 취소 실패")
+        					}
+        				}
+        				, error:function() {
+        					alert("삭제 에러");
+        				}
+        			});		
+        		});
+				
+				$(".replyLikeBtn").on("click", function(){
+					let targetType = $(this).data("type");
+        			let replyId = $(this).data("reply-id");
+        			
+        			$.ajax({
+        				type:"post"
+        				, url: "/post/like"
+        				, data:{"targetType": targetType 
+        		            , "targetId": replyId }
+        				, success:function(response) {
+        					if(response.result == "success") {
+								location.reload();
+							} else {
+								alert("좋아요 실패");
+							}
+        				}
+        				,error:function() {
+        					alert("좋아요 에러!");	
+        				}
+        				 
+        			});
+        		});
+				
+				$(".replyUnlikeBtn").on("click", function(){
+					let targetType = $(this).data("type");
+        			let replyId = $(this).data("reply-id");
+        			
+        			$.ajax({
+        				type:"delete"
+        				, url:"/post/unlike"
+        				, data:{"targetType": targetType 
+        		            , "targetId": replyId}
         				, success:function(response) {
         					if(response.result == "success") {
         						location.reload();

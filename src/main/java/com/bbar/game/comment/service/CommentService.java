@@ -9,10 +9,10 @@ import com.bbar.game.comment.DTO.CommentDTO;
 import com.bbar.game.comment.Repository.CommentRepository;
 import com.bbar.game.comment.domain.Comment;
 import com.bbar.game.like.service.LikeService;
+import com.bbar.game.replies.DTO.RepliesDTO;
+import com.bbar.game.replies.service.RepliesService;
 import com.bbar.game.user.domain.User;
 import com.bbar.game.user.service.UserService;
-
-import jakarta.servlet.http.HttpSession;
 
 @Service
 public class CommentService {
@@ -20,12 +20,14 @@ public class CommentService {
 	private CommentRepository commentRepository;
 	private UserService userService;
 	private LikeService likeService;
+	private RepliesService repliesService;
 	
 	public CommentService(CommentRepository commentRepository, UserService userService
-			, LikeService likeService) {
+			, LikeService likeService, RepliesService repliesService) {
 		this.commentRepository = commentRepository;
 		this.userService = userService;
 		this.likeService = likeService;
+		this.repliesService = repliesService;
 		
 	}
 	
@@ -57,6 +59,7 @@ public class CommentService {
 			User user = userService.getUser(userId);
 			boolean isCommentLike = likeService.isLike(comment.getId(), "comment", session);
 			int commentLikeCount = likeService.getLikeCount("comment", comment.getId());
+			List<RepliesDTO> repliesList = repliesService.getRepliesList(comment.getId(), session);
 			
 			CommentDTO commentDTO = CommentDTO.builder()
 			.commentId(comment.getId())
@@ -67,6 +70,7 @@ public class CommentService {
 			.imagePath(user.getImagePath())
 			.isCommentLike(isCommentLike)
 			.commentLikeCount(commentLikeCount)
+			.repliesList(repliesList)
 			.build();
 			
 			commentDTOList.add(commentDTO);

@@ -2,6 +2,7 @@ package com.bbar.game.post.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,29 @@ public class PostService {
 		} catch(Exception e) {
 			return false;
 		}		
+	}
+	
+	public boolean updatePost(int id, String title, String contents) {
+		
+		Optional<Post> optionalPost = postRepository.findById(id);
+		
+		if(optionalPost.isPresent()) {
+			Post post = optionalPost.get();
+			
+			post = post.toBuilder()
+			.title(title)
+			.contents(contents)
+			.build();
+			
+			try {
+				postRepository.save(post);
+				return true;
+			} catch(Exception e) {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 	
 	public List<BoardDTO> getPostList(int id){
