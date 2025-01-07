@@ -6,7 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.bbar.game.replies.domain.Replies;
 
+import jakarta.transaction.Transactional;
+
 public interface RepliesRepository extends JpaRepository<Replies, Integer> {
 	
 	List<Replies> findByCommentId(int commentId);
+	
+	@Transactional
+	public void deleteByCommentId(int commentId);
 }

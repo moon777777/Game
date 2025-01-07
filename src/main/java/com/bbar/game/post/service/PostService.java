@@ -12,6 +12,7 @@ import com.bbar.game.like.service.LikeService;
 import com.bbar.game.post.domain.Post;
 import com.bbar.game.post.dto.BoardDTO;
 import com.bbar.game.post.repository.PostRepository;
+import com.bbar.game.replies.service.RepliesService;
 import com.bbar.game.user.domain.User;
 import com.bbar.game.user.service.UserService;
 
@@ -21,14 +22,17 @@ public class PostService {
 	private PostRepository postRepository;
 	private UserService userService;
 	private LikeService likeService;
-	private CommentService commentService; 
+	private CommentService commentService;
+	private RepliesService repliesService;
 	
 	public PostService(PostRepository postRepository, UserService userService
-			, LikeService likeService, CommentService commentService) {
+			, LikeService likeService, CommentService commentService
+			, RepliesService repliesService) {
 		this.postRepository = postRepository;
 		this.userService = userService;
 		this.likeService = likeService;
 		this.commentService = commentService;
+		this.repliesService = repliesService;
 	}
 	
 	public boolean addPost(int userId, String title, String contents) {
@@ -68,6 +72,31 @@ public class PostService {
 		} else {
 			return false;
 		}
+	}
+	
+	public boolean deletePost(int id, int userId) {
+		
+		Optional<Post> optionalPost = postRepository.findById(id);
+		
+		if(optionalPost.isPresent()) {
+			Post post = optionalPost.get();
+			
+			likeService.deleteLikeByTargetId("post", id);
+			likeService.deleteLikeByTargetId("comment", id);
+			likeService.deleteLikeByTargetId("reply", id);
+			commentService.deleteCommentByPostId(id);
+			
+				
+			try {
+				postRepository.delete(post);
+				return true;
+			} catch(Exception e) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+		
 	}
 	
 	public List<BoardDTO> getPostList(int id){

@@ -57,5 +57,9 @@ public class LikeService {
 	public int getLikeCount(String targetType, int targetId) {
 		return likeRepository.countByTargetTypeAndTargetId(targetType, targetId);
 	}
+	
+	public void deleteLikeByTargetId(String targetType, int postId) {
+		likeRepository.deleteByTargetTypeAndTargetId(targetType, postId);
+	}
 
 }

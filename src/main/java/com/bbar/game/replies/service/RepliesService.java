@@ -71,5 +71,9 @@ public class RepliesService {
 		return repliesDTOList;
 	}
 	
+	public void deleteCommentByPostId(int commentId) {
+		repliesRepository.deleteByCommentId(commentId);
+	}
+	
 
 }
