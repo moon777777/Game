@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.bbar.game.post.dto.BoardDTO;
+
 import jakarta.transaction.Transactional;
 
 @SpringBootTest
@@ -21,20 +23,23 @@ class PostServiceTest {
 	
 	@Test
 	@Transactional
-	public void joinTest() {
+	public void addTest() {
 		
 		// given - 준비
-		int userId = 2;
-		String title = "testTtile";
-		String contents = "testContents";
+		
+		int userId = 1;
+		int postId = 13;
+		String title = "얌";
+		String contents = "옹";
 		
 		// when - 실행
-		boolean result = postService.addPost(1, "title", "contents");
+		boolean result = postService.addPost(userId, title, contents);
 		// then - 검증
-//		Post post = postService.getPost(1, 2);
+		
+		BoardDTO post = postService.getPost(postId, userId);
 		
 		logger.error("회원 가입 테스트 결과 : " + result);
-		assertNotNull(null);
+		assertNotNull(post);
 		assertEquals(result, true);
 //		assert
 	}

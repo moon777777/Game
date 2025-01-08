@@ -24,14 +24,15 @@ public class RepliesRestController {
 	
 	@PostMapping("/replies/create")
 	public Map<String,String> addComment(
-			@RequestParam("commentId") int commentId
+			@RequestParam("postId") int postId
+			, @RequestParam("commentId") int commentId
 			, @RequestParam("contents") String contents
 			, HttpSession session){
 		int userId = (Integer)session.getAttribute("userId");
 
 		Map<String, String> resultMap = new HashMap<>();
 		
-		if(repliesService.addReplies(userId, commentId, contents)) {
+		if(repliesService.addReplies(userId, postId, commentId, contents)) {
 			resultMap.put("result", "success");
 		} else {
 			resultMap.put("result", "fail");

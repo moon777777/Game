@@ -156,6 +156,20 @@ a:hover {
   background-color:  #202D3B;
 }
 
+.deleteBtn {
+	display: block;
+	padding: 7px;
+	color: white;
+	background: none;
+	border: none;
+	width: 100%;
+	cursor: pointer;
+}
+
+.deleteBtn:hover {
+  background-color:  #202D3B;
+}
+
 .option-menu {
 	position: absolute;
 	top: 150px;

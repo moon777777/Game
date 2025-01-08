@@ -26,10 +26,11 @@ public class RepliesService {
 		this.likeService = likeService;
 	}
 	
-	public boolean addReplies(int userId, int commentId, String contents) {
+	public boolean addReplies(int userId, int postId ,int commentId, String contents) {
 		
 		Replies replies = Replies.builder()
 		.userId(userId)
+		.postId(postId)
 		.commentId(commentId)
 		.contents(contents)
 		.build();
@@ -71,8 +72,8 @@ public class RepliesService {
 		return repliesDTOList;
 	}
 	
-	public void deleteCommentByPostId(int commentId) {
-		repliesRepository.deleteByCommentId(commentId);
+	public void deleteRepliesByPostId(int postId) {
+		repliesRepository.deleteByPostId(postId);
 	}
 	
 

@@ -51,27 +51,38 @@ public class PostService {
 		}		
 	}
 	
-	public boolean updatePost(int id, String title, String contents) {
+	public boolean updatePost(int id, String title, String contents, int userId) {
 		
 		Optional<Post> optionalPost = postRepository.findById(id);
 		
 		if(optionalPost.isPresent()) {
 			Post post = optionalPost.get();
 			
-			post = post.toBuilder()
-			.title(title)
-			.contents(contents)
-			.build();
-			
-			try {
+			if(post.getUserId() == userId) {
+				
+				post = post.toBuilder()
+				.title(title)
+				.contents(contents)
+				.build();
+				
 				postRepository.save(post);
 				return true;
-			} catch(Exception e) {
+			} else {
 				return false;
 			}
 		} else {
 			return false;
 		}
+			
+//			try {
+//				postRepository.save(post);
+//				return true;
+//			} catch(Exception e) {
+//				return false;
+//			}
+//		} else {
+//			return false;
+//		}
 	}
 	
 	public boolean deletePost(int id, int userId) {
@@ -81,22 +92,22 @@ public class PostService {
 		if(optionalPost.isPresent()) {
 			Post post = optionalPost.get();
 			
-			likeService.deleteLikeByTargetId("post", id);
-			likeService.deleteLikeByTargetId("comment", id);
-			likeService.deleteLikeByTargetId("reply", id);
-			commentService.deleteCommentByPostId(id);
-			
+			if(post.getUserId() == userId) {
+				likeService.deleteLikeByTargetId("post", id);
+				likeService.deleteLikeByTargetId("comment", id);
+				likeService.deleteLikeByTargetId("reply", id);
+				commentService.deleteCommentByPostId(id);
+				repliesService.deleteRepliesByPostId(id);
 				
-			try {
 				postRepository.delete(post);
 				return true;
-			} catch(Exception e) {
+			} else {
 				return false;
 			}
+			
 		} else {
 			return false;
-		}
-		
+		}		
 	}
 	
 	public List<BoardDTO> getPostList(int id){
@@ -138,7 +149,6 @@ public class PostService {
 		int commentCount = commentService.getCommentCount(post.getId());
 		postRepository.updateView(id);
 
-		post = postRepository.findById(id).orElse(null);
 		List<CommentDTO> commentList = commentService.getCommentList(post.getId(), userId);
 		
 		 BoardDTO board = BoardDTO.builder()

@@ -31,6 +31,8 @@ public class Replies {
 	private int id;
 	@Column(name="userId")
 	private int userId;
+	@Column(name="postId")
+	private int postId;
 	@Column(name="commentId")
 	private int commentId;
 	private String contents;

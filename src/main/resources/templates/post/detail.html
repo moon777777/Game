@@ -10,8 +10,8 @@
 					<h5 class="ml-2 mt-2" th:text="${post.title}">제목</h5>
 					<i class="bi bi-three-dots mr-3 option" th:if="${post.userId == session.userId}"></i>
 					<div class="option-menu d-none">
-						<a th:href="@{/post/update/{postId}(postId=${post.postId})}" class="option-btn">게시물 수정</a>
-						<a class="option-btn">게시물 삭제</a>
+						<a th:href="@{/post/update/{postId}(postId=${post.postId})}" class="option-btn text-white">게시물 수정</a>
+						<button class="deleteBtn" th:data-post-id="${post.postId}">게시물 삭제</button>
 					</div>									
 				</div>
 				<hr>
@@ -36,17 +36,17 @@
 					<div class="d-flex p-2">
 						<h4><i class="bi bi-chat-left-text-fill"></i></h4>
 						<span th:text="${post.commentCount}" class="ml-2 mt-1"></span>
-						<h4><i th:if="${post.isLike}" class="bi bi-hand-thumbs-up-fill ml-4 unlikeBtn" th:data-type="post" th:data-id="${post.postId}"></i></h4>
-						<h4><i th:unless="${post.isLike}" class="bi bi-hand-thumbs-up ml-4 likeBtn" th:data-type="post" th:data-id="${post.postId}"></i></h4>
+						<h4><i th:if="${post.isLike}" class="bi bi-hand-thumbs-up-fill ml-4 unlikeBtn" th:data-type="post" th:data-post-id="${post.postId}"></i></h4>
+						<h4><i th:unless="${post.isLike}" class="bi bi-hand-thumbs-up ml-4 likeBtn" th:data-type="post" th:data-post-id="${post.postId}"></i></h4>
 						<span th:text="${post.likeCount}" class="ml-1 mt-1 mr-4"></span>
 					</div>				
 				</div>
-				<form id="commentForm" th:data-post-id="${post.postId}">
+				<div>
 					<div class="d-flex">
 						<input type="text" class="comment-input ml-4 mb-3 text-white" id="commentInput" placeholder="댓글을 입력하세요">
-						<button type="submit" class= "btn mb-3 ml-2 comment-button text-white" >등록</button>
+						<button type="button" class= "btn mb-3 ml-2 comment-button text-white" th:data-post-id="${post.postId}">등록</button>
 					</div>
-				</form>
+				</div>
 				<div th:each="comment : ${post.commentList}">
 					<div class="d-flex justify-content-between mb-2 commentBox">
 						<div class="d-flex">
@@ -61,13 +61,13 @@
 							</div>
 						</div>
 						<div class="d-flex align-items-end mb-2 mr-5">
-							<i class="bi bi-chat-dots-fill mr-5 addReplyBtn" th:data-id="${comment.commentId}"></i>
-							<i th:if="${comment.isCommentLike}" class="bi bi-hand-thumbs-up-fill commentUnlikeBtn" th:data-type="comment" th:data-id="${comment.commentId}"></i>
-							<i th:unless="${comment.isCommentLike}" class="bi bi-hand-thumbs-up commentLikeBtn" th:data-type="comment"  th:data-id="${comment.commentId}"></i>
+							<i class="bi bi-chat-dots-fill mr-5 addReplyBtn" th:data-comment-id="${comment.commentId}"></i>
+							<i th:if="${comment.isCommentLike}" class="bi bi-hand-thumbs-up-fill commentUnlikeBtn" th:data-type="comment" th:data-comment-id="${comment.commentId}"></i>
+							<i th:unless="${comment.isCommentLike}" class="bi bi-hand-thumbs-up commentLikeBtn" th:data-type="comment"  th:data-comment-id="${comment.commentId}"></i>
 							<span th:text="${comment.commentLikeCount}" class="ml-1"></span>
 						</div>
 					</div>
-					<div th:each="reply : ${comment.repliesList}" class="d-flex justify-content-between mb-2">
+					<div th:each="reply : ${comment.repliesList}" class="d-flex justify-content-between mb-2" th:data-post-id="${post.postId}">
 						<div class="d-flex">
 							<i class="bi bi-arrow-return-right ml-5"></i>
 							<div class="nanoProfile-box d-flex ml-4">
@@ -86,13 +86,13 @@
 							<span th:text="${reply.repliesLikeCount}" class="ml-1"></span>
 						</div>
 					</div>
-					<div class="reply-box d-none" th:data-id="${comment.commentId}">
+					<div class="reply-box d-none" th:data-comment-id="${comment.commentId}">
 						<div class="d-flex justify-content-end mr-4">
 							<i class="bi bi-arrow-return-right mr-3"></i>
-							<input type="text" class="reply-input mb-3 text-white replyInput" th:data-id="${comment.commentId}" placeholder="댓글을 입력하세요">
-							<button type="button" class= "btn mb-3 ml-2 reply-button text-white" th:data-id="${comment.commentId}">등록</button>
+							<input type="text" class="reply-input mb-3 text-white replyInput" th:data-comment-id="${comment.commentId}" placeholder="댓글을 입력하세요">
+							<button type="button" class= "btn mb-3 ml-2 reply-button text-white" th:data-comment-id="${comment.commentId}" th:data-post-id="${post.postId}">등록</button>
 						</div>				
-					</div>
+					</div>			
 				</div>
 			</div>
 		</section>
@@ -104,8 +104,29 @@
 					 $(".option-menu").toggleClass("d-none");
 				});
 				
-				$("#commentForm").on("submit", function(e){
-					e.preventDefault();
+			$(".deleteBtn").on("click", function() {
+    				
+    				let postId = $(this).data("post-id");
+    				$.ajax({
+    					type:"delete"
+    					, url:"/post/delete"
+    					, data:{"id":postId}
+    					, success:function(response) {
+    						if(response.result == "success") {
+    							location.href="/post/list-view";
+    						} else {
+    							alert("삭제 실패!");
+    						}
+    						
+    					}
+    					, error:function() {
+    						alert("삭제 에러!");
+    					}
+    				});
+    				
+    			});
+				
+				$(".comment-button").on("click", function(){
 					
 					let postId = $(this).data("post-id");
         			let comment = $("#commentInput").val();
@@ -114,7 +135,7 @@
         				alert("댓글을 입력해주세요");
         				return;
         			}
-        			
+
         			$.ajax({
         				type:"post"
         				, url: "/post/comment/create"
@@ -134,14 +155,13 @@
 				});
 				
 				$(".addReplyBtn").on("click", function(){
-					let targetId = $(this).data("id");
-					 $(".reply-box[data-id='" + targetId + "']").toggleClass("d-none");
+					let targetId = $(this).data("comment-id");
+					 $(".reply-box[data-comment-id='" + targetId + "']").toggleClass("d-none");
 				});
-				
-				
+
 				
 				$(".reply-button").on("click", function(){
-					let targetId = $(this).data("id");
+					let commentId = $(this).data("comment-id");
 					let reply = $(this).prev(".reply-input").val();
 					let postId = $(this).data("post-id");
 					
@@ -153,7 +173,7 @@
 					$.ajax({
         				type:"post"
         				, url: "/post/replies/create"
-        				, data:{"commentId":targetId,"contents":reply}
+        				, data:{"postId":postId, "commentId":commentId,"contents":reply}
         				, success:function(response) {
         					if(response.result == "success") {
 								location.reload();
@@ -170,7 +190,7 @@
 				
 				$(".commentUnlikeBtn").on("click", function(){
 					let targetType = $(this).data("type");
-        			let targetId = $(this).data("id");
+        			let targetId = $(this).data("comment-id");
         			
         			$.ajax({
         				type:"delete"
@@ -237,7 +257,7 @@
 				
 				$(".commentLikeBtn").on("click", function(){
 					let targetType = $(this).data("type");
-        			let targetId = $(this).data("id");
+        			let targetId = $(this).data("comment-id");
         			
         			$.ajax({
         				type:"post"
@@ -260,7 +280,7 @@
 				
 				$(".unlikeBtn").on("click", function(){
 					let targetType = $(this).data("type");
-        			let targetId = $(this).data("id");
+        			let targetId = $(this).data("post-id");
         			
         			$.ajax({
         				type:"delete"
@@ -282,7 +302,7 @@
 				
 				$(".likeBtn").on("click", function(){
 					let targetType = $(this).data("type");
-        			let targetId = $(this).data("id");
+        			let targetId = $(this).data("post-id");
         			
         			$.ajax({
         				type:"post"

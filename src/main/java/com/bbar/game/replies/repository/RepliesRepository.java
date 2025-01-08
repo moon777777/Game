@@ -13,5 +13,5 @@ public interface RepliesRepository extends JpaRepository<Replies, Integer> {
 	List<Replies> findByCommentId(int commentId);
 	
 	@Transactional
-	public void deleteByCommentId(int commentId);
+	public void deleteByPostId(int postId);
 }

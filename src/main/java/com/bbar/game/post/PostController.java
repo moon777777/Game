@@ -38,13 +38,12 @@ public class PostController {
 	}
 	
 	@GetMapping("/update/{postId}")
-	public String updateBoard(@PathVariable("postId") String postId
+	public String updateBoard(@PathVariable("postId") int postId
 			, Model model
 			, HttpSession session) {
 		
-		int id = Integer.parseInt(postId);
 		Integer userId = (Integer) session.getAttribute("userId");
-		BoardDTO post = postService.getPost(id, userId);
+		BoardDTO post = postService.getPost(postId, userId);
 		model.addAttribute("post", post);
 		return "post/update";
 	}
