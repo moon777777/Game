@@ -10,8 +10,10 @@ import jakarta.transaction.Transactional;
 
 public interface RepliesRepository extends JpaRepository<Replies, Integer> {
 	
-	List<Replies> findByCommentId(int commentId);
+	public List<Replies> findByCommentId(int commentId);
 	
 	@Transactional
 	public void deleteByPostId(int postId);
+	
+	public int countByPostId(int postId);
 }

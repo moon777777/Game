@@ -2,6 +2,7 @@ package com.bbar.game.comment.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,7 @@ import com.bbar.game.comment.DTO.CommentDTO;
 import com.bbar.game.comment.Repository.CommentRepository;
 import com.bbar.game.comment.domain.Comment;
 import com.bbar.game.like.service.LikeService;
+import com.bbar.game.post.domain.Post;
 import com.bbar.game.replies.DTO.RepliesDTO;
 import com.bbar.game.replies.service.RepliesService;
 import com.bbar.game.user.domain.User;
@@ -45,6 +47,29 @@ public class CommentService {
 		} catch(Exception e) {
 			return false;
 		}
+	}
+	
+	public boolean deleteComment(int id, int userId) {
+		
+		Optional<Comment> optionalComment = commentRepository.findById(id);
+		
+		if(optionalComment.isPresent()) {
+			Comment comment = optionalComment.get();
+			
+			if(comment.getUserId() == userId) {
+				likeService.deleteLikeByTargetId("comment", id);
+//				likeService.deleteLikeByTargetId("reply", id);
+//				repliesService.deleteRepliesByPostId(id);
+				
+				commentRepository.delete(comment);
+				return true;
+			} else {
+				return false;
+			}
+			
+		} else {
+			return false;
+		}		
 	}
 	
 	public List<CommentDTO> getCommentList(int postId, int session) {

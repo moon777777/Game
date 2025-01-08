@@ -142,6 +142,10 @@ a:hover {
     cursor: pointer;
 }
 
+.replyDeleteBtn{
+	cursor: pointer;
+}
+
 .option-btn {
 	display: block;
 	padding: 7px;

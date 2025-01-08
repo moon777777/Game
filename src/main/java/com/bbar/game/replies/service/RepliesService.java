@@ -2,9 +2,11 @@ package com.bbar.game.replies.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.bbar.game.comment.domain.Comment;
 import com.bbar.game.like.service.LikeService;
 import com.bbar.game.replies.DTO.RepliesDTO;
 import com.bbar.game.replies.domain.Replies;
@@ -43,6 +45,27 @@ public class RepliesService {
 		}
 	}
 	
+	public boolean deleteReplies(int id, int userId) {
+		
+		Optional<Replies> optionalReplies = repliesRepository.findById(id);
+		
+		if(optionalReplies.isPresent()) {
+			Replies replies = optionalReplies.get();
+			
+			if(replies.getUserId() == userId) {
+				likeService.deleteLikeByTargetId("reply", id);
+				
+				repliesRepository.delete(replies);
+				return true;
+			} else {
+				return false;
+			}
+			
+		} else {
+			return false;
+		}		
+	}
+	
 	public List<RepliesDTO> getRepliesList(int commentId, int session) {
 		
 		List<Replies> repliesList = repliesRepository.findByCommentId(commentId);
@@ -74,6 +97,10 @@ public class RepliesService {
 	
 	public void deleteRepliesByPostId(int postId) {
 		repliesRepository.deleteByPostId(postId);
+	}
+	
+	public int countReplies(int postId) {
+		return repliesRepository.countByPostId(postId);
 	}
 	
 

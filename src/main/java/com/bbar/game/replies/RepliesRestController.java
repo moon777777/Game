@@ -3,6 +3,7 @@ package com.bbar.game.replies;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,6 +38,23 @@ public class RepliesRestController {
 		} else {
 			resultMap.put("result", "fail");
 		}
+		return resultMap;
+	}
+	
+	@DeleteMapping("/replies/delete")
+	public Map<String, String> deletePost(
+			@RequestParam("id") int id
+			, HttpSession session) {
+		
+		Map<String, String> resultMap = new HashMap<>();
+		int userId = (Integer)session.getAttribute("userId");
+		
+		if(repliesService.deleteReplies(id, userId)) {
+			resultMap.put("result", "success");
+		} else {
+			resultMap.put("result", "fail");
+		}
+		
 		return resultMap;
 	}
 

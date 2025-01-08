@@ -120,6 +120,7 @@ public class PostService {
 			User user = userService.getUser(userId);
 			int likeCount = likeService.getLikeCount("post", post.getId());
 			int commentCount = commentService.getCommentCount(post.getId());
+			int repliesCount = repliesService.countReplies(post.getId());
 			
 			BoardDTO board = BoardDTO.builder()
 			.postId(post.getId())
@@ -130,7 +131,7 @@ public class PostService {
 			.nickname(user.getNickname())
 			.createdAt(post.getCreatedAt())
 			.likeCount(likeCount)
-			.commentCount(commentCount)
+			.commentCount(commentCount + repliesCount)
 			.viewCount(post.getViewCount())
 			.build();
 			

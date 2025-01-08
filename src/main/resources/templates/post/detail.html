@@ -48,43 +48,51 @@
 					</div>
 				</div>
 				<div th:each="comment : ${post.commentList}">
-					<div class="d-flex justify-content-between mb-2 commentBox">
-						<div class="d-flex">
-							<div class="nanoProfile-box d-flex ml-4">
-								<img th:unless="${comment.imagePath == null}" th:src="${comment.imagePath}">
-								<img th:if="${comment.imagePath == null}" src="/static/images/default_img.webp">
+					<div class="mb-2 mt-3 commentBox" >
+						<div class="d-flex justify-content-between">
+							<div class="d-flex">
+								<div class="nanoProfile-box d-flex ml-4">
+									<img th:unless="${comment.imagePath == null}" th:src="${comment.imagePath}">
+									<img th:if="${comment.imagePath == null}" src="/static/images/default_img.webp">
+								</div>
+								<div class="ml-3">
+									<b class="commentName" th:text="${comment.nickname}"></b>
+									<i class="bi bi-x text-danger" th:if="${comment.userId == session.userId}"></i>
+									<div class="commentDate" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
+									<div th:text="${comment.contents}" class="content-font mt-2"></div>					
+								</div>	
 							</div>
-							<div class="ml-3">
-								<b class="commentName" th:text="${comment.nickname}"></b>
-								<div class="commentDate" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
-								<div th:text="${comment.contents}" class="content-font mt-2 mb-3"></div>					
-							</div>
-						</div>
-						<div class="d-flex align-items-end mb-2 mr-5">
-							<i class="bi bi-chat-dots-fill mr-5 addReplyBtn" th:data-comment-id="${comment.commentId}"></i>
-							<i th:if="${comment.isCommentLike}" class="bi bi-hand-thumbs-up-fill commentUnlikeBtn" th:data-type="comment" th:data-comment-id="${comment.commentId}"></i>
-							<i th:unless="${comment.isCommentLike}" class="bi bi-hand-thumbs-up commentLikeBtn" th:data-type="comment"  th:data-comment-id="${comment.commentId}"></i>
-							<span th:text="${comment.commentLikeCount}" class="ml-1"></span>
+							<div class="d-flex align-items-end justify-content-end mt-3 mr-5">
+								<i class="bi bi-chat-dots-fill mr-5 addReplyBtn" th:data-comment-id="${comment.commentId}"></i>
+								<i th:if="${comment.isCommentLike}" class="bi bi-hand-thumbs-up-fill commentUnlikeBtn" th:data-type="comment" th:data-comment-id="${comment.commentId}"></i>
+								<i th:unless="${comment.isCommentLike}" class="bi bi-hand-thumbs-up commentLikeBtn" th:data-type="comment"  th:data-comment-id="${comment.commentId}"></i>
+								<span th:text="${comment.commentLikeCount}" class="ml-1"></span>
+							</div>											
 						</div>
 					</div>
-					<div th:each="reply : ${comment.repliesList}" class="d-flex justify-content-between mb-2" th:data-post-id="${post.postId}">
-						<div class="d-flex">
-							<i class="bi bi-arrow-return-right ml-5"></i>
-							<div class="nanoProfile-box d-flex ml-4">
-								<img th:unless="${reply.imagePath == null}" th:src="${reply.imagePath}">
-								<img th:if="${reply.imagePath == null}" src="/static/images/default_img.webp">
+
+					<div th:each="reply : ${comment.repliesList}" class=" mb-1" th:data-post-id="${post.postId}">
+						<div class="d-flex justify-content-between mt-3">
+							<div class="d-flex">
+								<i class="bi bi-arrow-return-right ml-5"></i>
+								<div class="nanoProfile-box d-flex ml-4">
+									<img th:unless="${reply.imagePath == null}" th:src="${reply.imagePath}">
+									<img th:if="${reply.imagePath == null}" src="/static/images/default_img.webp">
+								</div>
+								<div class="ml-3">
+									<b class="replyName" th:text="${reply.nickname}">닉네임</b>
+									<i class="bi bi-x text-danger replyDeleteBtn" th:data-reply-id="${reply.repliesId}" th:if="${comment.userId == session.userId}"></i>
+									<div class="replyDate" th:text="${#temporals.format(reply.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
+									<div class="content-font mt-2" th:text="${reply.contents}">내용</div>					
+								</div>					
 							</div>
-							<div class="ml-3">
-								<b class="replyName" th:text="${reply.nickname}">닉네임</b>
-								<div class="replyDate" th:text="${#temporals.format(reply.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
-								<div class="content-font mt-2 mb-3" th:text="${reply.contents}">내용</div>					
-							</div>
+							<div class="d-flex align-items-end justify-content-end mt-3 mr-5">
+								<i th:if="${reply.isRepliesLike}" class="bi bi-hand-thumbs-up-fill replyUnlikeBtn" th:data-type="reply" th:data-reply-id="${reply.repliesId}"></i>
+								<i th:unless="${reply.isRepliesLike}" class="bi bi-hand-thumbs-up replyLikeBtn" th:data-type="reply"  th:data-reply-id="${reply.repliesId}"></i>
+								<span th:text="${reply.repliesLikeCount}" class="ml-1"></span>
+							</div>			
 						</div>
-						<div class="d-flex align-items-end mb-2 mr-5">
-							<i th:if="${reply.isRepliesLike}" class="bi bi-hand-thumbs-up-fill replyUnlikeBtn" th:data-type="reply" th:data-reply-id="${reply.repliesId}"></i>
-							<i th:unless="${reply.isRepliesLike}" class="bi bi-hand-thumbs-up replyLikeBtn" th:data-type="reply"  th:data-reply-id="${reply.repliesId}"></i>
-							<span th:text="${reply.repliesLikeCount}" class="ml-1"></span>
-						</div>
+						
 					</div>
 					<div class="reply-box d-none" th:data-comment-id="${comment.commentId}">
 						<div class="d-flex justify-content-end mr-4">
@@ -104,25 +112,57 @@
 					 $(".option-menu").toggleClass("d-none");
 				});
 				
-			$(".deleteBtn").on("click", function() {
+				$(".replyDeleteBtn").on("click", function() {
+    				
+    				let replyId = $(this).data("reply-id");
+    				
+    				let deleteConfirm = confirm("정말로 이 댓글을 삭제하시겠습니까?");
+    				
+    				if(deleteConfirm) {
+	    				$.ajax({
+	    					type:"delete"
+	    					, url:"/post/replies/delete"
+	    					, data:{"id":replyId}
+	    					, success:function(response) {
+	    						if(response.result == "success") {
+	    							location.reload();
+	    						} else {
+	    							alert("삭제 실패!");
+	    						}
+	    						
+	    					}
+	    					, error:function() {
+	    						alert("삭제 에러!");
+	    					}
+	    				});   					
+    				}
+    				
+    			});
+				
+				$(".deleteBtn").on("click", function() {
     				
     				let postId = $(this).data("post-id");
-    				$.ajax({
-    					type:"delete"
-    					, url:"/post/delete"
-    					, data:{"id":postId}
-    					, success:function(response) {
-    						if(response.result == "success") {
-    							location.href="/post/list-view";
-    						} else {
-    							alert("삭제 실패!");
-    						}
-    						
-    					}
-    					, error:function() {
-    						alert("삭제 에러!");
-    					}
-    				});
+    				let deleteConfirm = confirm("정말로 이 게시글을 삭제하시겠습니까?");
+    				
+    				if(deleteConfirm) {
+	    				$.ajax({
+	    					type:"delete"
+	    					, url:"/post/delete"
+	    					, data:{"id":postId}
+	    					, success:function(response) {
+	    						if(response.result == "success") {
+	    							location.href="/post/list-view";
+	    						} else {
+	    							alert("삭제 실패!");
+	    						}
+	    						
+	    					}
+	    					, error:function() {
+	    						alert("삭제 에러!");
+	    					}
+	    				});
+    					
+    				}
     				
     			});
 				

@@ -3,6 +3,7 @@ package com.bbar.game.comment;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +37,23 @@ public class CommentRestController {
 		} else {
 			resultMap.put("result", "fail");
 		}
+		return resultMap;
+	}
+	
+	@DeleteMapping("/comment/delete")
+	public Map<String, String> deletePost(
+			@RequestParam("id") int id
+			, HttpSession session) {
+		
+		Map<String, String> resultMap = new HashMap<>();
+		int userId = (Integer)session.getAttribute("userId");
+		
+		if(commentService.deleteComment(id, userId)) {
+			resultMap.put("result", "success");
+		} else {
+			resultMap.put("result", "fail");
+		}
+		
 		return resultMap;
 	}
 

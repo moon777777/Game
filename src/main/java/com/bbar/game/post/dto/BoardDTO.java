@@ -25,6 +25,7 @@ public class BoardDTO {
 	private boolean isLike;
 	private int commentCount;
 	private int viewCount;
+	private int repliesCount;
 	
 	private List<CommentDTO> commentList; 
 
