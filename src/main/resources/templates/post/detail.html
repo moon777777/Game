@@ -81,7 +81,7 @@
 								</div>
 								<div class="ml-3">
 									<b class="replyName" th:text="${reply.nickname}">닉네임</b>
-									<i class="bi bi-x text-danger replyDeleteBtn" th:data-reply-id="${reply.repliesId}" th:if="${comment.userId == session.userId}"></i>
+									<i class="bi bi-x text-danger replyDeleteBtn" th:data-reply-id="${reply.repliesId}" th:if="${reply.userId == session.userId}"></i>
 									<div class="replyDate" th:text="${#temporals.format(reply.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
 									<div class="content-font mt-2" th:text="${reply.contents}">내용</div>					
 								</div>					
