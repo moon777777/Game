@@ -179,9 +179,9 @@ public class PostService {
 		int page = pageable.getPageNumber() - 1;
 		int pageLimit = 10;
 		
-		Pageable addPageable = PageRequest.of(page, pageLimit, Sort.by("id").descending());
+		Pageable usePageable = PageRequest.of(page, pageLimit, Sort.by("id").descending());
 		
-		Page<Post> boardPage = postRepository.findAll(addPageable);
+		Page<Post> boardPage = postRepository.findAll(usePageable);
 		
 		return boardPage.map(post -> {
 			int userId = post.getUserId();

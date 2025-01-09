@@ -76,5 +76,26 @@ public class PostController {
 		return "post/detail";
 	}
 	
+	@GetMapping("/test-view")
+	public String paging(
+			@PageableDefault(page = 1) Pageable pageable
+			, Model model
+			, HttpSession session) {
+		
+		Page<BoardDTO> postPage = postService.paging(pageable);
+
+		LocalDate localDate = LocalDate.now();
+		model.addAttribute("localDate", localDate);
+		
+		int blockLimit = 5;
+		int startPage = ((pageable.getPageNumber() - 1) / blockLimit) * blockLimit + 1;
+		int endPage = Math.min((startPage + blockLimit - 1), postPage.getTotalPages());
+		
+		model.addAttribute("postPage", postPage);
+		model.addAttribute("startPage", startPage);
+    	model.addAttribute("endPage", endPage);
+		return "post/list";
+	}
+	
 
 }
