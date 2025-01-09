@@ -24,7 +24,7 @@
 			            </tr>
 			        </thead>
 			        <tbody>
-			            <tr class="small" th:each="post:${postPage}">
+			            <tr class="small" th:each="post:${postList}">
 			                <td th:text="${post.postId}"></td>
 			                <td><a th:href="|/post/detail-view/${post.postId}|" th:text="${post.title}" class="text-white"></a>
 			                	<b class="ml-1"><span th:unless="${post.commentCount} == 0" th:text="|[${post.commentCount}]|"></span></b>
@@ -68,11 +68,9 @@
 		                <option>동영상</option>
 		            </select>		    
 			    </div>
-			    <div class="d-flex justify-content-center mb-2">
-			    	<span th:each="page: ${#numbers.sequence(startPage, endPage)}">
-			    		<a th:href="@{/post/list-view(page=${page})}" th:text="${page}" class="text-white ml-1"></a>
-			    	</span>
-			    
-			    </div>
+    			<div class="d-flex justify-content-center mb-2">
+    				<a href="#" class="text-white">1</a>
+    			</div>
 			</div>
 		</section>
+</html>

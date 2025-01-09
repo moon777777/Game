@@ -78,15 +78,6 @@ public class PostService {
 			return false;
 		}
 			
-//			try {
-//				postRepository.save(post);
-//				return true;
-//			} catch(Exception e) {
-//				return false;
-//			}
-//		} else {
-//			return false;
-//		}
 	}
 	
 	public boolean deletePost(int id, int userId) {
@@ -114,7 +105,7 @@ public class PostService {
 		}		
 	}
 	
-	public List<BoardDTO> getPostList(int id){
+	public List<BoardDTO> getPostList(){
 		List<Post> postList =  postRepository.findAllByOrderByIdDesc();
 		
 		List<BoardDTO> boardList = new ArrayList<>();

@@ -51,19 +51,17 @@ public class PostController {
 		return "post/update";
 	}
 	
-	@GetMapping("/list-view")
+	@GetMapping("/listSave-view")
 	public String listBoard(Model model
-			, HttpSession session) {
-		
-		int userId = (Integer)session.getAttribute("userId");
+			) {
 		
 		LocalDate localDate = LocalDate.now();
 		model.addAttribute("localDate", localDate);
 		
-		List<BoardDTO> postList = postService.getPostList(userId);
+		List<BoardDTO> postList = postService.getPostList();
 		
 		model.addAttribute("postList", postList);
-		return "post/list";
+		return "post/listSave";
 	}
 	
 	@GetMapping("/detail-view/{id}")
@@ -76,11 +74,10 @@ public class PostController {
 		return "post/detail";
 	}
 	
-	@GetMapping("/test-view")
+	@GetMapping("/list-view")
 	public String paging(
 			@PageableDefault(page = 1) Pageable pageable
-			, Model model
-			, HttpSession session) {
+			, Model model) {
 		
 		Page<BoardDTO> postPage = postService.paging(pageable);
 
