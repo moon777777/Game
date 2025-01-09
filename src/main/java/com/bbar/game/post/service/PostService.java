@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.bbar.game.comment.DTO.CommentDTO;
@@ -169,6 +173,37 @@ public class PostService {
 		 
 		 return board;
 		
+	}
+	
+	public Page<BoardDTO> paging(Pageable pageable) {
+		int page = pageable.getPageNumber() - 1;
+		int pageLimit = 10;
+		
+		Pageable addPageable = PageRequest.of(page, pageLimit, Sort.by("id").descending());
+		
+		Page<Post> boardPage = postRepository.findAll(addPageable);
+		
+		return boardPage.map(post -> {
+			int userId = post.getUserId();
+			User user = userService.getUser(userId);
+			int likeCount = likeService.getLikeCount("post", post.getId());
+			int commentCount = commentService.getCommentCount(post.getId());
+			int repliesCount = repliesService.countReplies(post.getId());
+			
+			BoardDTO board = BoardDTO.builder()
+			.postId(post.getId())
+			.userId(userId)
+			.title(post.getTitle())
+			.contents(post.getContents())
+			.nickname(user.getNickname())
+			.createdAt(post.getCreatedAt())
+			.likeCount(likeCount)
+			.commentCount(commentCount + repliesCount)
+			.viewCount(post.getViewCount())
+			.build();
+			
+			return board;
+		});
 	}
 
 }
