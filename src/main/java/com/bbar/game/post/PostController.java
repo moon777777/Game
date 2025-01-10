@@ -84,7 +84,7 @@ public class PostController {
 		LocalDate localDate = LocalDate.now();
 		model.addAttribute("localDate", localDate);
 		
-		int blockLimit = 5;
+		int blockLimit = 3;
 		int startPage = ((pageable.getPageNumber() - 1) / blockLimit) * blockLimit + 1;
 		int endPage = Math.min((startPage + blockLimit - 1), postPage.getTotalPages());
 		
@@ -92,6 +92,7 @@ public class PostController {
 		model.addAttribute("startPage", startPage);
     	model.addAttribute("endPage", endPage);
 		return "post/list";
+		
 	}
 	
 

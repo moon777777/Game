@@ -9,7 +9,6 @@
 				<nav class="mt-3 mb-2 ml-2 d-flex">
 			        <h5><a href="#" class="text-white ml-2">공식 영상</a></h5>
 			        <h5><a href="/post/list-view" class="text-white ml-4">자유게시판</a></h5>
-			        <h5><a href="#" class="text-white ml-4">세팅</a></h5>
 			        <h5><a href="#" class="text-white ml-4">픽업 기간</a></h5>
 			    </nav>
 			    <table class="table text-center">
@@ -69,10 +68,19 @@
 		            </select>		    
 			    </div>
 			    <div class="d-flex justify-content-center mb-2">
+			    	<!-- 이전버튼 -->
+			    	<a th:if="${postPage.first}" href="#" class="text-white mx-1"> &lt; 이전</a>
+			    	<a th:if="${!postPage.first}" th:href="@{/post/list-view(page=${postPage.number})}" class="text-white mx-1"> &lt; 이전 </a>
+	
 			    	<span th:each="page: ${#numbers.sequence(startPage, endPage)}">
-			    		<a th:href="@{/post/list-view(page=${page})}" th:text="${page}" class="text-white ml-1"></a>
+			    		<span th:if="${page == postPage.number + 1}" th:text="${page}" class="mx-1 font-weight-bold"></span>
+			    		<span th:unless="${page == postPage.number + 1}">
+			    			<a th:href="@{/post/list-view(page=${page})}" th:text="${page}" class="text-white mx-1"></a>
+			    		</span>
 			    	</span>
-			    
+			    	<!-- 다음버튼 -->
+			    	<a th:if="${postPage.last}" href="#" class="text-white mx-1"> 다음 ></a>
+			    	<a th:if="${!postPage.last}" th:href="@{/post/list-view(page=${postPage.number + 2})}" class="text-white mx-1"> 다음 ></a>
 			    </div>
 			</div>
 		</section>

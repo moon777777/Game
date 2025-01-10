@@ -168,7 +168,7 @@ public class PostService {
 	
 	public Page<BoardDTO> paging(Pageable pageable) {
 		int page = pageable.getPageNumber() - 1;
-		int pageLimit = 10;
+		int pageLimit = 3;
 		
 		Pageable usePageable = PageRequest.of(page, pageLimit, Sort.by("id").descending());
 		
