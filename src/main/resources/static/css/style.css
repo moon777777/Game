@@ -146,6 +146,18 @@ a:hover {
 	cursor: pointer;
 }
 
+.commentDeleteBtn{
+	cursor: pointer;
+}
+
+.replyUpdateBtn{
+	cursor: pointer;
+}
+
+.commentUpdateBtn{
+	cursor: pointer;
+}
+
 .option-btn {
 	display: block;
 	padding: 7px;
@@ -224,6 +236,39 @@ a:hover {
 
 .pen-icon:hover .menu {
 	display: block;
+}
+
+.commentUpdateInput {
+	width:550px;
+	height:40px;
+    background-color: #2C3E50;
+    border: 1px solid grey;
+    outline: none;
+   	border-radius: 4px;
+}
+
+.replyUpdateInput {
+	width:550px;
+	height:40px;
+    background-color: #2C3E50;
+    border: 1px solid grey;
+    outline: none;
+   	border-radius: 4px;
+}
+
+.cancelBtn {
+	 background-color:#6C8BFE;
+	 width: 70px;
+}
+
+.cuBtn {
+	 background-color:#6C8BFE;
+	 width: 70px;
+}
+
+.ruBtn {
+	 background-color:#6C8BFE;
+	 width: 70px;
 }
 
 .menu a {

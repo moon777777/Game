@@ -45,6 +45,28 @@ public class RepliesService {
 		}
 	}
 	
+	public boolean updateReplies(int id, String contents, int userId) {
+		Optional<Replies> optionalReplies = repliesRepository.findById(id);
+		
+		if(optionalReplies.isPresent()) {
+			Replies replies = optionalReplies.get();
+			
+			if(replies.getUserId() == userId) {
+				
+				replies = replies.toBuilder()
+				.contents(contents)
+				.build();
+				
+				repliesRepository.save(replies);
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+	
 	public boolean deleteReplies(int id, int userId) {
 		
 		Optional<Replies> optionalReplies = repliesRepository.findById(id);

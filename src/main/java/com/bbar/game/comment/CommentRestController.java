@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,8 +41,28 @@ public class CommentRestController {
 		return resultMap;
 	}
 	
+	@PutMapping("/comment/update")
+	public Map<String, String>updateComment(
+			@RequestParam("id") int id
+			, @RequestParam("contents") String contents
+			, HttpSession session) {
+		
+		Map<String, String> resultMap = new HashMap<>();
+		
+		int userId = (Integer)session.getAttribute("userId");
+		
+		if(commentService.updatePost(id, contents, userId)) {
+			resultMap.put("result", "success");
+		} else {
+			resultMap.put("result", "fail");
+		}
+		
+		return resultMap;
+		
+	}
+	
 	@DeleteMapping("/comment/delete")
-	public Map<String, String> deletePost(
+	public Map<String, String> deleteComment(
 			@RequestParam("id") int id
 			, HttpSession session) {
 		

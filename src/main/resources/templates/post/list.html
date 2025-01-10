@@ -61,9 +61,9 @@
 				        	<i class="bi bi-search"></i>
 				    	</button>
 	    			</div>
-					<select class="mr-4">
+					<select onchange="if(this.value) location.href=(this.value);" class="mr-4">
 						<option value="">선택</option>
-		                <option>글쓰기</option>
+		                <option value="/post/create-view">글쓰기</option>
 		                <option>동영상</option>
 		            </select>		    
 			    </div>

@@ -5,6 +5,7 @@
         layout:decorate="~{layout/default}">
         
         <section layout:fragment="contents" class="contents d-flex justify-content-center mb-5">
+        <!-- 게시글 -->
 			<div class="default-box rounded my-1" th:data-post-id="${post.postId}">
 				<div class="d-flex justify-content-between align-items-center">
 					<h5 class="ml-2 mt-2" th:text="${post.title}">제목</h5>
@@ -41,27 +42,36 @@
 						<span th:text="${post.likeCount}" class="ml-1 mt-1 mr-4"></span>
 					</div>				
 				</div>
-				<div>
+				
+				
+				<div><!-- 댓글 -->
 					<div class="d-flex">
 						<input type="text" class="comment-input ml-4 mb-3 text-white" id="commentInput" placeholder="댓글을 입력하세요">
 						<button type="button" class= "btn mb-3 ml-2 comment-button text-white" th:data-post-id="${post.postId}">등록</button>
 					</div>
 				</div>
 				<div th:each="comment : ${post.commentList}">
-					<div class="mb-2 mt-3 commentBox" >
-						<div class="d-flex justify-content-between">
+					<div class="mb-4 mt-3 commentBox" >
+						<div th:unless="${comment.contents.equals('삭제된 댓글입니다.')}" class="d-flex justify-content-between">
 							<div class="d-flex">
 								<div class="nanoProfile-box d-flex ml-4">
 									<img th:unless="${comment.imagePath == null}" th:src="${comment.imagePath}">
 									<img th:if="${comment.imagePath == null}" src="/static/images/default_img.webp">
 								</div>
-								<div class="ml-3">
+								<div class="ml-3 commentInfo">
 									<b class="commentName" th:text="${comment.nickname}"></b>
-									<i class="bi bi-x text-danger" th:if="${comment.userId == session.userId}"></i>
+									<i class="bi bi-check2 text-success commentUpdateBtn" th:data-comment-id="${comment.commentId}" th:if="${comment.userId == session.userId}"></i>
+									<i class="bi bi-x text-danger commentDeleteBtn" th:data-comment-id="${comment.commentId}" th:if="${comment.userId == session.userId}"></i>
 									<div class="commentDate" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
-									<div th:text="${comment.contents}" class="content-font mt-2"></div>					
-								</div>	
+									<div th:text="${comment.contents}" class="content-font commentContents mt-2"  th:data-comment-id="${comment.commentId}"></div>
+									<div class="d-flex justify-content-end mr-4">
+										<input type="text" class="commentUpdateInput mb-3 text-white d-none" th:data-comment-id="${comment.commentId}" th:value="${comment.contents}">
+										<button type="button" class= "btn mb-3 ml-2 cancelBtn text-white d-none" th:data-comment-id="${comment.commentId}">취소</button>
+										<button type="button" class= "btn mb-3 ml-2 cuBtn text-white d-none" th:data-comment-id="${comment.commentId}">등록</button>
+									</div>
+								</div>
 							</div>
+							<!-- 댓글 좋아요 -->
 							<div class="d-flex align-items-end justify-content-end mt-3 mr-5">
 								<i class="bi bi-chat-dots-fill mr-5 addReplyBtn" th:data-comment-id="${comment.commentId}"></i>
 								<i th:if="${comment.isCommentLike}" class="bi bi-hand-thumbs-up-fill commentUnlikeBtn" th:data-type="comment" th:data-comment-id="${comment.commentId}"></i>
@@ -69,10 +79,15 @@
 								<span th:text="${comment.commentLikeCount}" class="ml-1"></span>
 							</div>											
 						</div>
+						<div th:if="${comment.contents.equals('삭제된 댓글입니다.')}">
+							<div th:text="${comment.contents}" class="content-font my-2 ml-5"></div>
+						</div>
 					</div>
-
+					
+					
+					<!-- 대댓글 -->
 					<div th:each="reply : ${comment.repliesList}" class=" mb-1" th:data-post-id="${post.postId}">
-						<div class="d-flex justify-content-between mt-3">
+						<div class="d-flex justify-content-between mt-1 mb-3">
 							<div class="d-flex">
 								<i class="bi bi-arrow-return-right ml-5"></i>
 								<div class="nanoProfile-box d-flex ml-4">
@@ -81,9 +96,15 @@
 								</div>
 								<div class="ml-3">
 									<b class="replyName" th:text="${reply.nickname}">닉네임</b>
+									<i class="bi bi-check2 text-success replyUpdateBtn" th:if="${reply.userId == session.userId}" th:data-reply-id="${reply.repliesId}"></i>
 									<i class="bi bi-x text-danger replyDeleteBtn" th:data-reply-id="${reply.repliesId}" th:if="${reply.userId == session.userId}"></i>
 									<div class="replyDate" th:text="${#temporals.format(reply.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
-									<div class="content-font mt-2" th:text="${reply.contents}">내용</div>					
+									<div class="content-font mt-2 replyContents" th:text="${reply.contents}" th:data-reply-id="${reply.repliesId}">내용</div>
+									<div class="d-flex justify-content-end mr-4">
+										<input type="text" class="replyUpdateInput mb-3 text-white d-none" th:data-reply-id="${reply.repliesId}" th:value="${reply.contents}">
+										<button type="button" class= "btn mb-3 ml-2 cancelBtn text-white d-none" th:data-reply-id="${reply.repliesId}">취소</button>
+										<button type="button" class= "btn mb-3 ml-2 ruBtn text-white d-none" th:data-reply-id="${reply.repliesId}">등록</button>
+									</div>					
 								</div>					
 							</div>
 							<div class="d-flex align-items-end justify-content-end mt-3 mr-5">
@@ -92,8 +113,9 @@
 								<span th:text="${reply.repliesLikeCount}" class="ml-1"></span>
 							</div>			
 						</div>
-						
 					</div>
+					
+					<!-- 대댓글 입력창 -->
 					<div class="reply-box d-none" th:data-comment-id="${comment.commentId}">
 						<div class="d-flex justify-content-end mr-4">
 							<i class="bi bi-arrow-return-right mr-3"></i>
@@ -107,6 +129,110 @@
 		
 		 <script layout:fragment="script">
 			$(document).ready(function(){
+				
+				$(".ruBtn").on("click", function(){
+					let id = $(this).data("reply-id");
+					let contents = $(".replyUpdateInput").val();
+					
+					if(contents == "") {
+						alert("내용을 입력하세요");
+						return;
+					}
+					
+					$.ajax({
+						type: "put"
+						, url:"/post/replies/update"
+						, data:{"id":id, "contents":contents}
+						, success:function(response) {
+							if(response.result == "success") {
+								location.reload();
+							} else {
+								alert("수정 실패");
+							}
+						}
+						, error:function() {
+							alert("수정 에러");
+						}
+						
+					});
+				});
+				
+				$(".replyUpdateBtn").on("click", function(){
+					let replyId = $(this).data("reply-id");
+					
+					$(".replyContents[data-reply-id='" + replyId + "']").addClass("d-none");
+					$(".replyUpdateInput[data-reply-id='" + replyId + "']").removeClass("d-none");
+					$(".cancelBtn[data-reply-id='" + replyId + "']").removeClass("d-none");
+					$(".ruBtn[data-reply-id='" + replyId + "']").removeClass("d-none");
+					
+				});
+				
+				$(".commentUpdateBtn").on("click", function(){
+					let commentId = $(this).data("comment-id");
+					
+					$(".commentContents[data-comment-id='" + commentId + "']").addClass("d-none");
+					$(".commentUpdateInput[data-comment-id='" + commentId + "']").removeClass("d-none");
+					$(".cancelBtn[data-comment-id='" + commentId + "']").removeClass("d-none");
+					$(".cuBtn[data-comment-id='" + commentId + "']").removeClass("d-none");
+					
+				});
+				
+				$(".cancelBtn").on("click", function(){
+					location.reload();
+				});
+				
+				$(".cuBtn").on("click", function(){
+					let id = $(this).data("comment-id");
+					let contents = $(".commentUpdateInput").val();
+					
+					if(contents == "") {
+						alert("내용을 입력하세요");
+						return;
+					}
+					
+					$.ajax({
+						type: "put"
+						, url:"/post/comment/update"
+						, data:{"id":id, "contents":contents}
+						, success:function(response) {
+							if(response.result == "success") {
+								location.reload();
+							} else {
+								alert("수정 실패");
+							}
+						}
+						, error:function() {
+							alert("수정 에러");
+						}
+						
+					});
+				});
+				
+				$(".commentDeleteBtn").on("click", function() {
+    				
+    				let commentId = $(this).data("comment-id");
+    				
+    				let deleteConfirm = confirm("정말로 이 댓글을 삭제하시겠습니까?");
+    				
+    				if(deleteConfirm) {
+	    				$.ajax({
+	    					type:"delete"
+	    					, url:"/post/comment/delete"
+	    					, data:{"id":commentId}
+	    					, success:function(response) {
+	    						if(response.result == "success") {
+	    							location.reload();
+	    						} else {
+	    							alert("삭제 실패!");
+	    						}
+	    						
+	    					}
+	    					, error:function() {
+	    						alert("삭제 에러!");
+	    					}
+	    				});   					
+    				}
+    			});
 				
 				$(".option").on("click", function(){
 					 $(".option-menu").toggleClass("d-none");

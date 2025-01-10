@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ public class RepliesRestController {
 	}
 	
 	@PostMapping("/replies/create")
-	public Map<String,String> addComment(
+	public Map<String,String> addReply(
 			@RequestParam("postId") int postId
 			, @RequestParam("commentId") int commentId
 			, @RequestParam("contents") String contents
@@ -41,8 +42,27 @@ public class RepliesRestController {
 		return resultMap;
 	}
 	
+	@PutMapping("/replies/update")
+	public Map<String, String> updateReply(
+			@RequestParam("id") int id
+			, @RequestParam("contents") String contents
+			, HttpSession session){
+		
+		int userId = (Integer) session.getAttribute("userId");
+		
+		Map<String, String> resultMap = new HashMap<>();
+		
+		if(repliesService.updateReplies(id, contents, userId)) {
+			resultMap.put("result", "success");
+		} else {
+			resultMap.put("result", "fail");
+		}
+		
+		return resultMap;
+	}
+	
 	@DeleteMapping("/replies/delete")
-	public Map<String, String> deletePost(
+	public Map<String, String> deleteReply(
 			@RequestParam("id") int id
 			, HttpSession session) {
 		

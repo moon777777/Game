@@ -43,7 +43,7 @@ public class PostRestController {
 	}
 	
 	@PutMapping("/update")
-	public Map<String, String>updateMemo(
+	public Map<String, String>updatePost(
 			@RequestParam("id") int id
 			, @RequestParam("title") String title
 			, @RequestParam("contents") String contents

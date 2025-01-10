@@ -49,6 +49,30 @@ public class CommentService {
 		}
 	}
 	
+	public boolean updatePost(int id, String contents, int userId) {
+		
+		Optional<Comment> optionalComment = commentRepository.findById(id);
+		
+		if(optionalComment.isPresent()) {
+			Comment comment = optionalComment.get();
+			
+			if(comment.getUserId() == userId) {
+				
+				comment = comment.toBuilder()
+				.contents(contents)
+				.build();
+				
+				commentRepository.save(comment);
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+			
+	}
+	
 	public boolean deleteComment(int id, int userId) {
 		
 		Optional<Comment> optionalComment = commentRepository.findById(id);
@@ -58,10 +82,9 @@ public class CommentService {
 			
 			if(comment.getUserId() == userId) {
 				likeService.deleteLikeByTargetId("comment", id);
-//				likeService.deleteLikeByTargetId("reply", id);
-//				repliesService.deleteRepliesByPostId(id);
+				comment.setContents("삭제된 댓글입니다.");
 				
-				commentRepository.delete(comment);
+				commentRepository.save(comment);
 				return true;
 			} else {
 				return false;
