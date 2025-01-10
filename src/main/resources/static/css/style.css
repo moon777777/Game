@@ -202,6 +202,7 @@ a:hover {
 .pen-icon {
     position: relative;
     display: inline-block;
+    top:12px;
 }
 
 .viewNum {
@@ -232,6 +233,26 @@ a:hover {
 	right: 0;
 	background-color: #2C3E50;
 	border: 1px solid #ddd;
+}
+
+.p-menu {	
+	display: none;
+	position: absolute;
+	top: 40px;
+	right: 100px;
+	background-color: #2C3E50;
+	border: 1px solid #ddd;
+}
+
+.profile:hover .p-menu{
+	display: block;
+}
+
+.p-menu a {
+	width: 170px;
+    display: block;
+    padding: 8px 15px;
+    text-decoration: none;
 }
 
 .pen-icon:hover .menu {

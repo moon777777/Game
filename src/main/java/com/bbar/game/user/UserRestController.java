@@ -90,6 +90,7 @@ public class UserRestController {
 		if(user != null) {
 			session.setAttribute("userId", user.getId());
 			session.setAttribute("userNickname", user.getNickname());
+			session.setAttribute("userProfile", user.getImagePath());
 			
 			resultMap.put("result", "success");
 		} else {
