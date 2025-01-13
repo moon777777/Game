@@ -16,20 +16,20 @@ public class ImagesService {
 	}
 	
 	public boolean addImages(int userId, int postId, MultipartFile file) {
-		
-		String imagePath = com.bbar.game.common.MultiFileManager.saveFile(userId, postId, file);
-		
+
+	    String imagePath = com.bbar.game.common.MultiFileManager.saveFile(userId, postId, file);
+	
 		Images images = Images.builder()
 		.postId(postId)
 		.imagePath(imagePath)
 		.build();
-		
-		try {
-			imagesRepository.save(images);
-			return true;
-		} catch(Exception e) {
-			return false;
-		}
-	}
-
+	  	
+		 try {
+	            imagesRepository.save(images);
+	            return true;
+	        } catch (Exception e) {
+	            return false; 
+	        }
+    } 
 }
+

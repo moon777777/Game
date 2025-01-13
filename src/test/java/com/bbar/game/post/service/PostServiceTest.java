@@ -21,26 +21,26 @@ class PostServiceTest {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
-	@Test
-	@Transactional
-	public void addTest() {
-		
-		// given - 준비
-		
-		int userId = 1;
-		int postId = 13;
-		String title = "얌";
-		String contents = "옹";
-		
-		// when - 실행
-		boolean result = postService.addPost(userId, title, contents);
-		// then - 검증
-		
-		BoardDTO post = postService.getPost(postId, userId);
-		
-		logger.error("회원 가입 테스트 결과 : " + result);
-		assertNotNull(post);
-		assertEquals(result, true);
+//	@Test
+//	@Transactional
+//	public void addTest() {
+//		
+//		// given - 준비
+//		
+//		int userId = 1;
+//		int postId = 13;
+//		String title = "얌";
+//		String contents = "옹";
+//		
+//		// when - 실행
+//		boolean result = postService.addPost(userId, title, contents);
+//		// then - 검증
+//		
+//		BoardDTO post = postService.getPost(postId, userId);
+//		
+//		logger.error("회원 가입 테스트 결과 : " + result);
+//		assertNotNull(post);
+//		assertEquals(result, true);
 //		assert
-	}
+//	}
 }

@@ -28,5 +28,6 @@ public class BoardDTO {
 	private int repliesCount;
 	
 	private List<CommentDTO> commentList; 
+	private List<String> imageFiles;
 
 }

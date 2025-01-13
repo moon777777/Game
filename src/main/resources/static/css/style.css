@@ -277,6 +277,10 @@ a:hover {
    	border-radius: 4px;
 }
 
+.uploadBtn {
+	background-color:#6C8BFE;
+}
+
 .cancelBtn {
 	 background-color:#6C8BFE;
 	 width: 70px;

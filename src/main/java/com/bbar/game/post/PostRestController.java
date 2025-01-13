@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.bbar.game.post.domain.Post;
 import com.bbar.game.post.service.PostService;
 
 import jakarta.servlet.http.HttpSession;
@@ -28,13 +30,14 @@ public class PostRestController {
 	public Map<String, String> addPost(
 			@RequestParam("title") String title
 			, @RequestParam("contents") String contents
+			, @RequestParam(value="imageFile", required=false) MultipartFile file
 			, HttpSession session){
 		
 		int userId = (Integer)session.getAttribute("userId");
 		
 		Map<String, String> resultMap = new HashMap<>();
 		
-		if(postService.addPost(userId, title, contents)) {
+		if(postService.addPost(userId, title, contents, file)) {
 			resultMap.put("result", "success");
 		} else {
 			resultMap.put("result", "fail");
@@ -50,7 +53,6 @@ public class PostRestController {
 			, HttpSession session) {
 		
 		Map<String, String> resultMap = new HashMap<>();
-		
 		int userId = (Integer)session.getAttribute("userId");
 		
 		if(postService.updatePost(id, title, contents, userId)) {

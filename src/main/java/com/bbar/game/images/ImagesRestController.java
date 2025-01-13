@@ -33,6 +33,8 @@ private ImagesService imagesService;
 		
 		Map <String, String> resultMap = new HashMap<>();
 		
+		 boolean success = imagesService.addImages(userId, postId, file);
+		
 		if(imagesService.addImages(userId, postId, file)) {
 			resultMap.put("result", "success");
 		} else {

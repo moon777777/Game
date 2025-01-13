@@ -9,9 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bbar.game.comment.DTO.CommentDTO;
 import com.bbar.game.comment.service.CommentService;
+import com.bbar.game.images.service.ImagesService;
 import com.bbar.game.like.service.LikeService;
 import com.bbar.game.post.domain.Post;
 import com.bbar.game.post.dto.BoardDTO;
@@ -28,24 +30,29 @@ public class PostService {
 	private LikeService likeService;
 	private CommentService commentService;
 	private RepliesService repliesService;
+	private ImagesService imagesService; 
 	
 	public PostService(PostRepository postRepository, UserService userService
 			, LikeService likeService, CommentService commentService
-			, RepliesService repliesService) {
+			, RepliesService repliesService
+			, ImagesService imagesService) {
 		this.postRepository = postRepository;
 		this.userService = userService;
 		this.likeService = likeService;
 		this.commentService = commentService;
 		this.repliesService = repliesService;
+		this.imagesService = imagesService;
 	}
 	
-	public boolean addPost(int userId, String title, String contents) {
+	public boolean addPost(int userId, String title, String contents, MultipartFile file) {
 		
 		Post post = Post.builder()
 		.userId(userId)
 		.title(title)
 		.contents(contents)
 		.build();
+		
+		boolean imageSaved = imagesService.addImages(userId, post.getId(), file);
 		
 		try {
 			postRepository.save(post);
