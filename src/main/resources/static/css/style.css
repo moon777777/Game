@@ -125,6 +125,10 @@ a:hover {
 	font-size:14px;
 }
 
+.imgDeleteBtn {
+    cursor: pointer;
+}
+
 .reply-input {
 	width:700px;
 	height:40px;

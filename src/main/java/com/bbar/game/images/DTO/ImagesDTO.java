@@ -8,7 +8,7 @@ import lombok.Getter;
 @Builder
 @Getter
 public class ImagesDTO {
-	private int imagesId;
+	private int imageId;
 	private int postId;
 	
 	private String imagePath;

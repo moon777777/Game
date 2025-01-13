@@ -50,12 +50,13 @@ public class PostRestController {
 			@RequestParam("id") int id
 			, @RequestParam("title") String title
 			, @RequestParam("contents") String contents
+			, @RequestParam(value="imageFiles", required=false) List<MultipartFile> files
 			, HttpSession session) {
 		
 		Map<String, String> resultMap = new HashMap<>();
 		int userId = (Integer)session.getAttribute("userId");
 		
-		if(postService.updatePost(id, title, contents, userId)) {
+		if(postService.updatePost(id, title, contents, userId, files)) {
 			resultMap.put("result", "success");
 		} else {
 			resultMap.put("result", "fail");

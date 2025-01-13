@@ -62,15 +62,15 @@ public class PostService {
 		}		
 	}
 	
-	public boolean updatePost(int id, String title, String contents, int userId) {
+	public boolean updatePost(int id, String title, String contents, int userId, List<MultipartFile> files) {
 		
 		Optional<Post> optionalPost = postRepository.findById(id);
 		
 		if(optionalPost.isPresent()) {
 			Post post = optionalPost.get();
-			
+			boolean imagesSave = imagesService.addMultiImages(userId, post.getId(), files);
 			if(post.getUserId() == userId) {
-				
+							
 				post = post.toBuilder()
 				.title(title)
 				.contents(contents)

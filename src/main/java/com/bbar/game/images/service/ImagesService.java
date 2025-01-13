@@ -12,6 +12,7 @@ import com.bbar.game.common.FileManager;
 import com.bbar.game.images.DTO.ImagesDTO;
 import com.bbar.game.images.domain.Images;
 import com.bbar.game.images.repository.ImagesRepository;
+import com.bbar.game.replies.domain.Replies;
 
 @Service
 public class ImagesService {
@@ -72,7 +73,7 @@ public class ImagesService {
         
         for (Images image : images) {
         	 ImagesDTO imagesDTO = ImagesDTO.builder()
-             .imagesId(image.getId())
+             .imageId(image.getId())
              .postId(image.getPostId())
              .imagePath(image.getImagePath())
              .build();
@@ -85,6 +86,19 @@ public class ImagesService {
 	
 	public void deleteImagesByPostId(int postId) {
 		imagesRepository.deleteByPostId(postId);
+	}
+	
+	public boolean deleteImage(int id) {
+		Optional<Images> optionalImages = imagesRepository.findById(id);
+		
+		if(optionalImages.isPresent()) {
+			Images images = optionalImages.get();
+			
+			imagesRepository.delete(images);
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
 
