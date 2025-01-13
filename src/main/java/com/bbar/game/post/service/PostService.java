@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bbar.game.comment.DTO.CommentDTO;
 import com.bbar.game.comment.service.CommentService;
+import com.bbar.game.images.DTO.ImagesDTO;
 import com.bbar.game.images.service.ImagesService;
 import com.bbar.game.like.service.LikeService;
 import com.bbar.game.post.domain.Post;
@@ -52,10 +53,9 @@ public class PostService {
 		.contents(contents)
 		.build();
 		
-		boolean imagesSave = imagesService.addMultiImages(userId, post.getId(), files);
-		
 		try {
 			postRepository.save(post);
+			boolean imagesSave = imagesService.addMultiImages(userId, post.getId(), files);
 			return true;
 		} catch(Exception e) {
 			return false;
@@ -100,6 +100,7 @@ public class PostService {
 				likeService.deleteLikeByTargetId("reply", id);
 				commentService.deleteCommentByPostId(id);
 				repliesService.deleteRepliesByPostId(id);
+				imagesService.deleteImagesByPostId(id);
 				
 				postRepository.delete(post);
 				return true;
@@ -153,6 +154,8 @@ public class PostService {
 		postRepository.updateView(id);
 
 		List<CommentDTO> commentList = commentService.getCommentList(post.getId(), userId);
+		List<ImagesDTO> imagesList = imagesService.getImages(post.getId());
+		
 		
 		 BoardDTO board = BoardDTO.builder()
         .postId(post.getId())
@@ -167,6 +170,7 @@ public class PostService {
         .commentCount(commentCount)
         .commentList(commentList)
         .viewCount(post.getViewCount())
+        .imageFiles(imagesList)
         .build();
 		 
 		 return board;

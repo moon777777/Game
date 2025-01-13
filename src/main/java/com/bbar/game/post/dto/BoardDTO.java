@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.bbar.game.comment.DTO.CommentDTO;
+import com.bbar.game.images.DTO.ImagesDTO;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +29,6 @@ public class BoardDTO {
 	private int repliesCount;
 	
 	private List<CommentDTO> commentList; 
-	private List<String> imageFiles;
+	private List<ImagesDTO> imageFiles;
 
 }

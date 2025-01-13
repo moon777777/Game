@@ -2,11 +2,14 @@ package com.bbar.game.images.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bbar.game.comment.domain.Comment;
 import com.bbar.game.common.FileManager;
+import com.bbar.game.images.DTO.ImagesDTO;
 import com.bbar.game.images.domain.Images;
 import com.bbar.game.images.repository.ImagesRepository;
 
@@ -62,5 +65,26 @@ public class ImagesService {
             return false; 
         }
     }
+	
+	public List<ImagesDTO> getImages(int postId) {
+        List<Images> images = imagesRepository.findByPostId(postId); 
+        List<ImagesDTO> imagesDTOList = new ArrayList<>();
+        
+        for (Images image : images) {
+        	 ImagesDTO imagesDTO = ImagesDTO.builder()
+             .imagesId(image.getId())
+             .postId(image.getPostId())
+             .imagePath(image.getImagePath())
+             .build();
+        	 
+        	 imagesDTOList.add(imagesDTO);
+        }
+        
+        return imagesDTOList;
+    }
+	
+	public void deleteImagesByPostId(int postId) {
+		imagesRepository.deleteByPostId(postId);
+	}
 }
 

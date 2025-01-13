@@ -65,7 +65,7 @@ public class PostController {
 	}
 	
 	@GetMapping("/detail-view/{id}")
-	public String deatilBoard(@PathVariable("id") int id
+	public String deatailBoard(@PathVariable("id") int id
 			, Model model
 			, HttpSession session) {
 		Integer userId = (Integer) session.getAttribute("userId");
