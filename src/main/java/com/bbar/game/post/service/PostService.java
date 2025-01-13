@@ -44,7 +44,7 @@ public class PostService {
 		this.imagesService = imagesService;
 	}
 	
-	public boolean addPost(int userId, String title, String contents, MultipartFile file) {
+	public boolean addPost(int userId, String title, String contents, List<MultipartFile> files) {
 		
 		Post post = Post.builder()
 		.userId(userId)
@@ -52,7 +52,7 @@ public class PostService {
 		.contents(contents)
 		.build();
 		
-		boolean imageSaved = imagesService.addImages(userId, post.getId(), file);
+		boolean imagesSave = imagesService.addMultiImages(userId, post.getId(), files);
 		
 		try {
 			postRepository.save(post);

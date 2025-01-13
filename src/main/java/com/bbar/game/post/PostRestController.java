@@ -1,6 +1,7 @@
 package com.bbar.game.post;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.bbar.game.post.domain.Post;
 import com.bbar.game.post.service.PostService;
 
 import jakarta.servlet.http.HttpSession;
@@ -30,14 +30,14 @@ public class PostRestController {
 	public Map<String, String> addPost(
 			@RequestParam("title") String title
 			, @RequestParam("contents") String contents
-			, @RequestParam(value="imageFile", required=false) MultipartFile file
+			, @RequestParam(value="imageFiles", required=false) List<MultipartFile> files
 			, HttpSession session){
 		
 		int userId = (Integer)session.getAttribute("userId");
 		
 		Map<String, String> resultMap = new HashMap<>();
 		
-		if(postService.addPost(userId, title, contents, file)) {
+		if(postService.addPost(userId, title, contents, files)) {
 			resultMap.put("result", "success");
 		} else {
 			resultMap.put("result", "fail");

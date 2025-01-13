@@ -55,7 +55,7 @@
 						let title = $("#titleInput").val();
 						let contents = $("#contentsInput").val();
 						
-						let file = $("#fileInput")[0].files[0];
+						let files = $("#fileInput")[0].files;
 						
 						if(title == "") {
 							alert("제목을 입력해주세요.");
@@ -70,19 +70,24 @@
 						let formData = new FormData();
 						formData.append("title", title);
 						formData.append("contents", contents);
-						formData.append("imageFile", file);
+						
+						if (files.length > 0) {
+					        for (let i = 0; i < files.length; i++) {
+					            formData.append("imageFiles", files[i]);
+					        }
+					    }
 						
 						$.ajax({
 							type: "post"
 							,url: "/post/create"
 							,data: formData
-							, enctype:"multipart/form-data" // 파일 업로드 추가 옵션
-							, processData:false // 파일 업로드 추가 옵션
-							, contentType:false // 파일 업로드 추가 옵션
+							, enctype:"multipart/form-data" 
+							, processData:false 
+							, contentType:false 
 							, success: function(response){
-								if(response.result="success"){
+								if(response.result == "success"){
 									alert("게시물이 등록되었습니다.");
-									location.href="/post/list-view"
+									location.href = "/post/list-view"
 								} else{
 									alert("게시물이 등록을 실패하였습니다.");
 								}
