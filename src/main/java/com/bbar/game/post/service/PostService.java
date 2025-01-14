@@ -1,6 +1,5 @@
 package com.bbar.game.post.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +21,8 @@ import com.bbar.game.post.repository.PostRepository;
 import com.bbar.game.replies.service.RepliesService;
 import com.bbar.game.user.domain.User;
 import com.bbar.game.user.service.UserService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class PostService {
@@ -45,35 +46,42 @@ public class PostService {
 		this.imagesService = imagesService;
 	}
 	
-	public boolean addPost(int userId, String title, String contents, List<MultipartFile> files) {
+	@Transactional
+	public boolean addPost(int userId, String title, String contents, String youtubeUrl ,List<MultipartFile> files) {
 		
 		Post post = Post.builder()
 		.userId(userId)
 		.title(title)
+		.youtubeUrl(youtubeUrl)
 		.contents(contents)
 		.build();
 		
 		try {
 			postRepository.save(post);
-			boolean imagesSave = imagesService.addMultiImages(userId, post.getId(), files);
+			if(files != null) {
+				boolean imagesSave = imagesService.addMultiImages(userId, post.getId(), files);
+			}
 			return true;
 		} catch(Exception e) {
 			return false;
 		}		
 	}
 	
-	public boolean updatePost(int id, String title, String contents, int userId, List<MultipartFile> files) {
+	public boolean updatePost(int id, String title, String contents, int userId, String youtubeUrl, List<MultipartFile> files) {
 		
 		Optional<Post> optionalPost = postRepository.findById(id);
 		
 		if(optionalPost.isPresent()) {
 			Post post = optionalPost.get();
-			boolean imagesSave = imagesService.addMultiImages(userId, post.getId(), files);
+			if(files != null) {
+				boolean imagesSave = imagesService.addMultiImages(userId, post.getId(), files);
+			}
 			if(post.getUserId() == userId) {
 							
 				post = post.toBuilder()
 				.title(title)
 				.contents(contents)
+				.youtubeUrl(youtubeUrl)
 				.build();
 				
 				postRepository.save(post);
@@ -113,36 +121,36 @@ public class PostService {
 		}		
 	}
 	
-	public List<BoardDTO> getPostList(){
-		List<Post> postList =  postRepository.findAllByOrderByIdDesc();
-		
-		List<BoardDTO> boardList = new ArrayList<>();
-		
-		for(Post post:postList) {
-			int userId = post.getUserId();
-			User user = userService.getUser(userId);
-			int likeCount = likeService.getLikeCount("post", post.getId());
-			int commentCount = commentService.getCommentCount(post.getId());
-			int repliesCount = repliesService.countReplies(post.getId());
-			
-			BoardDTO board = BoardDTO.builder()
-			.postId(post.getId())
-			.userId(userId)
-			.title(post.getTitle())
-			.contents(post.getContents())
-			.imagePath(user.getImagePath())
-			.nickname(user.getNickname())
-			.createdAt(post.getCreatedAt())
-			.likeCount(likeCount)
-			.commentCount(commentCount + repliesCount)
-			.viewCount(post.getViewCount())
-			.build();
-			
-			boardList.add(board);
-		}
-		
-		return boardList;
-	}
+//	public List<BoardDTO> getPostList(){
+//		List<Post> postList =  postRepository.findAllByOrderByIdDesc();
+//		
+//		List<BoardDTO> boardList = new ArrayList<>();
+//		
+//		for(Post post:postList) {
+//			int userId = post.getUserId();
+//			User user = userService.getUser(userId);
+//			int likeCount = likeService.getLikeCount("post", post.getId());
+//			int commentCount = commentService.getCommentCount(post.getId());
+//			int repliesCount = repliesService.countReplies(post.getId());
+//			
+//			BoardDTO board = BoardDTO.builder()
+//			.postId(post.getId())
+//			.userId(userId)
+//			.title(post.getTitle())
+//			.contents(post.getContents())
+//			.imagePath(user.getImagePath())
+//			.nickname(user.getNickname())
+//			.createdAt(post.getCreatedAt())
+//			.likeCount(likeCount)
+//			.commentCount(commentCount + repliesCount)
+//			.viewCount(post.getViewCount())
+//			.build();
+//			
+//			boardList.add(board);
+//		}
+//		
+//		return boardList;
+//	}
 	
 	public BoardDTO getPost(int id, int userId) {
 		Post post = postRepository.findById(id).orElse(null);
@@ -171,6 +179,7 @@ public class PostService {
         .commentList(commentList)
         .viewCount(post.getViewCount())
         .imageFiles(imagesList)
+        .youtubeUrl(post.getYoutubeUrl())
         .build();
 		 
 		 return board;
@@ -179,7 +188,7 @@ public class PostService {
 	
 	public Page<BoardDTO> paging(Pageable pageable) {
 		int page = pageable.getPageNumber() - 1;
-		int pageLimit = 3;
+		int pageLimit = 10;
 		
 		Pageable usePageable = PageRequest.of(page, pageLimit, Sort.by("id").descending());
 		
@@ -192,6 +201,8 @@ public class PostService {
 			int commentCount = commentService.getCommentCount(post.getId());
 			int repliesCount = repliesService.countReplies(post.getId());
 			
+			List<ImagesDTO> imagesList = imagesService.getImages(post.getId());
+			
 			BoardDTO board = BoardDTO.builder()
 			.postId(post.getId())
 			.userId(userId)
@@ -202,6 +213,8 @@ public class PostService {
 			.likeCount(likeCount)
 			.commentCount(commentCount + repliesCount)
 			.viewCount(post.getViewCount())
+			.imageFiles(imagesList)
+			.youtubeUrl(post.getYoutubeUrl())
 			.build();
 			
 			return board;

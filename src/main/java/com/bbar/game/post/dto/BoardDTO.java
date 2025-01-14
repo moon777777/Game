@@ -27,6 +27,7 @@ public class BoardDTO {
 	private int commentCount;
 	private int viewCount;
 	private int repliesCount;
+	private String youtubeUrl;
 	
 	private List<CommentDTO> commentList; 
 	private List<ImagesDTO> imageFiles;

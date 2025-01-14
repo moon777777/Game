@@ -35,4 +35,4 @@ spring:
                         required: true
 mybatis:
     mapper-locations: mappers/*Mapper.xml
-    
+

@@ -77,10 +77,11 @@ public static final String FILE_UPLOAD_PATH = "C:\\Moon777\\SpringProject\\uploa
 	public static String saveFiles(int userId, int postId, MultipartFile file) {
 		
 		if(file == null) {
+			System.err.println("업로드된 파일이 null입니다.");
 			return null;
 		}
 		
-		String directoryName = "/" + userId + "_" + postId + "_" + System.currentTimeMillis();
+		String directoryName = "/" + userId + "_" +  "_" + System.currentTimeMillis();
 		String directoryPath = FILE_UPLOAD_PATH + directoryName;
 		
 		// 디렉토리 만들기

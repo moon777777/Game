@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.bbar.game.comment.domain.Comment;
 import com.bbar.game.common.FileManager;
 import com.bbar.game.images.DTO.ImagesDTO;
 import com.bbar.game.images.domain.Images;
 import com.bbar.game.images.repository.ImagesRepository;
-import com.bbar.game.replies.domain.Replies;
 
 @Service
 public class ImagesService {
@@ -23,30 +22,26 @@ public class ImagesService {
 		this.imagesRepository = imagesRepository;
 	}
 	
-	public boolean addImages(int userId, int postId, MultipartFile file) {
+//	public boolean addImages(int userId, int postId, MultipartFile file) {
+//
+//	    String imagePath = FileManager.saveFiles(userId, postId, file);
+//	
+//		Images images = Images.builder()
+//		.postId(postId)
+//		.imagePath(imagePath)
+//		.build();
+//	  	
+//		 try {
+//            imagesRepository.save(images);
+//            return true;
+//        } catch (Exception e) {
+//            return false; 
+//        }
+//	}
 
-	    String imagePath = FileManager.saveFiles(userId, postId, file);
-	
-		Images images = Images.builder()
-		.postId(postId)
-		.imagePath(imagePath)
-		.build();
-	  	
-		 try {
-            imagesRepository.save(images);
-            return true;
-        } catch (Exception e) {
-            return false; 
-        }
-	}
-	
 	public boolean addMultiImages(int userId, int postId, List<MultipartFile> files) {
 		
 		List<Images> imagesList = new ArrayList<>();
-		
-		if (files == null) {
-	        return false;
-	    }
 		
 		for (MultipartFile file : files) {
 			String imagePath = FileManager.saveFiles(userId, postId, file);
@@ -84,10 +79,12 @@ public class ImagesService {
         return imagesDTOList;
     }
 	
+	// 게시물 삭제시 이미지 삭제
 	public void deleteImagesByPostId(int postId) {
 		imagesRepository.deleteByPostId(postId);
 	}
 	
+	// 이미지만 따로 삭제
 	public boolean deleteImage(int id) {
 		Optional<Images> optionalImages = imagesRepository.findById(id);
 		

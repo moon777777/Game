@@ -30,6 +30,7 @@ public class PostRestController {
 	public Map<String, String> addPost(
 			@RequestParam("title") String title
 			, @RequestParam("contents") String contents
+			, @RequestParam(value="youtubeUrl", required=false) String youtubeUrl
 			, @RequestParam(value="imageFiles", required=false) List<MultipartFile> files
 			, HttpSession session){
 		
@@ -37,7 +38,7 @@ public class PostRestController {
 		
 		Map<String, String> resultMap = new HashMap<>();
 		
-		if(postService.addPost(userId, title, contents, files)) {
+		if(postService.addPost(userId, title, contents, youtubeUrl ,files)) {
 			resultMap.put("result", "success");
 		} else {
 			resultMap.put("result", "fail");
@@ -50,13 +51,14 @@ public class PostRestController {
 			@RequestParam("id") int id
 			, @RequestParam("title") String title
 			, @RequestParam("contents") String contents
+			, @RequestParam(value="youtubeUrl", required=false) String youtubeUrl
 			, @RequestParam(value="imageFiles", required=false) List<MultipartFile> files
 			, HttpSession session) {
 		
 		Map<String, String> resultMap = new HashMap<>();
 		int userId = (Integer)session.getAttribute("userId");
 		
-		if(postService.updatePost(id, title, contents, userId, files)) {
+		if(postService.updatePost(id, title, contents, userId, youtubeUrl ,files)) {
 			resultMap.put("result", "success");
 		} else {
 			resultMap.put("result", "fail");

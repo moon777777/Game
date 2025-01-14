@@ -1,7 +1,6 @@
 package com.bbar.game.post;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.bbar.game.comment.service.CommentService;
 import com.bbar.game.post.dto.BoardDTO;
 import com.bbar.game.post.service.PostService;
 
@@ -23,11 +21,10 @@ import jakarta.servlet.http.HttpSession;
 public class PostController {
 	
 	private PostService postService; 
-	private CommentService commentService;
 	
-	public PostController(PostService postService, CommentService commentService) {
+	
+	public PostController(PostService postService) {
 		this.postService = postService;
-		this.commentService = commentService;
 	}
 	
 	@GetMapping("/profile")
@@ -51,18 +48,18 @@ public class PostController {
 		return "post/update";
 	}
 	
-	@GetMapping("/listSave-view")
-	public String listBoard(Model model
-			) {
-		
-		LocalDate localDate = LocalDate.now();
-		model.addAttribute("localDate", localDate);
-		
-		List<BoardDTO> postList = postService.getPostList();
-		
-		model.addAttribute("postList", postList);
-		return "post/listSave";
-	}
+//	@GetMapping("/listSave-view")
+//	public String listBoard(Model model
+//			) {
+//		
+//		LocalDate localDate = LocalDate.now();
+//		model.addAttribute("localDate", localDate);
+//		
+//		List<BoardDTO> postList = postService.getPostList();
+//		
+//		model.addAttribute("postList", postList);
+//		return "post/listSave";
+//	}
 	
 	@GetMapping("/detail-view/{id}")
 	public String deatailBoard(@PathVariable("id") int id
@@ -93,6 +90,11 @@ public class PostController {
     	model.addAttribute("endPage", endPage);
 		return "post/list";
 		
+	}
+	
+	@GetMapping("/video/url-view")
+	public String inputYoutube() {
+		return "post/url";
 	}
 	
 

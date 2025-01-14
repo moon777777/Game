@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "mybatis.servlet.multipart.enabled",
+  "type": "java.lang.String",
+  "description": "A description for 'mybatis.servlet.multipart.enabled'"
+}]}

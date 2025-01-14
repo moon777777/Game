@@ -45,6 +45,15 @@ a:hover {
 	 background-color:#6C8BFE;
 }
 
+.urlBtn {
+	 background-color:#6C8BFE;
+	 width:150px;
+}
+
+.urlInput {
+	width:630px;
+}
+
 .profile-box {
 	width: 120px;
    	height: 120px;
