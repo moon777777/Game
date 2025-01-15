@@ -17,9 +17,7 @@
 					
 					<!-- url -->
 					<h5 class="bold">url</h5>
-					<div class="d-flex">
-						<div class="mt-3 mr-3">https://www.youtube.com/watch?v=</div><input type="text" class="form-control mt-2 urlInput" placeholder="Youtube 링크를 입력하세요">					
-					</div>
+						<input type="text" class="form-control mt-2 urlInput" placeholder="Youtube 링크를 입력하세요">					
 					
 					<!-- 내용 -->
 					<h5 class="mt-3">내용</h5>
@@ -38,6 +36,7 @@
 						let title = $("#titleInput").val();
         				let contents = $("#contentsInput").val();
         				let url = $(".urlInput").val();
+        				let urlId = url.split("?v=")[1];
         			
 	        			if(title == "") {
 							alert("제목을 입력해주세요.");
@@ -58,7 +57,7 @@
         			$.ajax({
         				type:"post"
         				, url: "/post/create"
-        				, data:{"title":title,"contents":contents, "youtubeUrl":url}
+        				, data:{"title":title,"contents":contents, "youtubeUrl":urlId}
         				, success:function(response) {
         					if(response.result == "success") {
         						location.href = "/post/list-view"
