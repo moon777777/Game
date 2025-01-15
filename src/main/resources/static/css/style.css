@@ -14,6 +14,13 @@ hr {
 	font-size:24px;
 }
 
+.ui-datepicker-calendar>thead>tr>th:first-child { color: red !important; } 
+.ui-datepicker-calendar>tbody>tr>td:first-child a { color: red !important; }
+
+.ui-datepicker-calendar>thead>tr>th:last-child { color: #0099ff !important; }   
+.ui-datepicker-calendar>tbody>tr>td:last-child a { color: #0099ff !important; } 
+    
+
 a:hover {
         text-decoration: none;
     }
@@ -41,6 +48,10 @@ a:hover {
     border: none;
 }
 
+.modal-content {
+	background-color: #2C3E50;
+}
+
 .default-button {
 	 background-color:#6C8BFE;
 }
@@ -48,6 +59,14 @@ a:hover {
 .urlBtn {
 	 background-color:#6C8BFE;
 	 width:150px;
+}
+
+.eventBtn {
+	background-color:#6C8BFE;
+}
+
+.scheduleBtn {
+	background-color:#6C8BFE;
 }
 
 .profile-box {

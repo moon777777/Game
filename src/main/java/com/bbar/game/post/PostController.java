@@ -48,19 +48,6 @@ public class PostController {
 		return "post/update";
 	}
 	
-//	@GetMapping("/listSave-view")
-//	public String listBoard(Model model
-//			) {
-//		
-//		LocalDate localDate = LocalDate.now();
-//		model.addAttribute("localDate", localDate);
-//		
-//		List<BoardDTO> postList = postService.getPostList();
-//		
-//		model.addAttribute("postList", postList);
-//		return "post/listSave";
-//	}
-	
 	@GetMapping("/detail-view/{id}")
 	public String deatailBoard(@PathVariable("id") int id
 			, Model model
@@ -96,6 +83,13 @@ public class PostController {
 	public String inputYoutube() {
 		return "post/url";
 	}
+	
+	@GetMapping("/calendar-view")
+	public String calendar() {
+		return "post/calendar";
+	}
+	
+	
 	
 
 }
