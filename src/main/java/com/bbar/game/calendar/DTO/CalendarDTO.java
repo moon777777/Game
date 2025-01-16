@@ -1,6 +1,6 @@
 package com.bbar.game.calendar.DTO;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +13,7 @@ public class CalendarDTO {
 	private String title;
 	private String contents;
 	
-	private LocalDateTime startDate;
-	private LocalDateTime endDate;
+	private LocalDate startDate;
+	private LocalDate endDate;
 
 }

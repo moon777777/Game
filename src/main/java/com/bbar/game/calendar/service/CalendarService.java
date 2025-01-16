@@ -1,5 +1,6 @@
 package com.bbar.game.calendar.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -22,15 +23,15 @@ public class CalendarService {
 	
 	public boolean addSchedule(String title, String conetents, String startDate, String endDate) {
 		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		LocalDateTime startDateTime = LocalDateTime.parse(startDate + " 05:00:00", formatter);
-		LocalDateTime endDateTime = LocalDateTime.parse(endDate + " 04:59:59", formatter);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate startDay = LocalDate.parse(startDate, formatter);
+		LocalDate endDay = LocalDate.parse(endDate, formatter);
 		
 		Calendar calendar = Calendar.builder()
 		.title(title)
 		.contents(conetents)
-		.startDate(startDateTime)
-		.endDate(endDateTime)
+		.startDate(startDay)
+		.endDate(endDay)
 		.build();
 		
 		try {

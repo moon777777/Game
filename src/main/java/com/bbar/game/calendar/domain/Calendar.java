@@ -1,5 +1,6 @@
 package com.bbar.game.calendar.domain;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -31,9 +32,9 @@ public class Calendar {
 	private String contents;
 	
 	@Column(name="startDate")
-	private LocalDateTime startDate;
+	private LocalDate startDate;
 	@Column(name="endDate")
-	private LocalDateTime endDate;
+	private LocalDate endDate;
 	
 	@CreationTimestamp
 	@Column(name="createdAt")

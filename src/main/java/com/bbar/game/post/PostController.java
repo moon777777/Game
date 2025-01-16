@@ -91,7 +91,7 @@ public class PostController {
 	}
 	
 	@GetMapping("/calendar-view")
-	public String getCalendar() {
+	public String getCalendar(HttpSession session) {
 		return "post/calendar";
 	}
 	

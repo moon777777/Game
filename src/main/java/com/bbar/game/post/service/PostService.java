@@ -152,11 +152,20 @@ public class PostService {
 //		return boardList;
 //	}
 	
-	public BoardDTO getPost(int id, int userId) {
+	public BoardDTO getPost(int id, Integer userId) {
 		Post post = postRepository.findById(id).orElse(null);
 		
+		if(userId == null) {
+			userId = 0;
+		}
+		
 		User user = userService.getUser(post.getUserId());
-		boolean isLike = likeService.isLike(post.getId(), "post", userId);
+//		boolean isLike = likeService.isLike(post.getId(), "post", userId);
+		
+		 boolean isLike = false;
+		    if (userId > 0) {
+		        isLike = likeService.isLike(post.getId(), "post", userId);
+		    }
 		int likeCount = likeService.getLikeCount("post", post.getId());
 		int commentCount = commentService.getCommentCount(post.getId());
 		postRepository.updateView(id);

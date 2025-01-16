@@ -2,8 +2,7 @@
 		<!-- 메뉴 -->
 		<div class="d-flex align-items-end">
 			<h1 class="ml-3">BBAR</h1>
-			<h4 class="ml-4">메인</h4>
-			<h4 class="ml-4"><a href="/post/list-view" class="text-white">ZZZ</a></h4>
+			<h4 class="ml-4"><a href="/post/list-view" class="text-white">메인</a></h4>
 		</div>
 		
 		<!-- 검색 -->
@@ -18,6 +17,9 @@
 	
 		<!--프로필-->
 		<div class="d-flex">
+			<div th:if="${session.userId == null}" class="mr-4 d-flex">
+				<a href="/user/login-view" class="text-white">로그인</a>
+			</div>
 			<div th:if="${session.userId != null}" class="mr-4 d-flex">
 				<div class="pen-icon">
 					<h5><i class="bi bi-pencil mr-4"></i></h5>
