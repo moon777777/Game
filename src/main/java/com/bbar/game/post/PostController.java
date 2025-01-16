@@ -1,6 +1,7 @@
 package com.bbar.game.post;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bbar.game.calendar.DTO.CalendarDTO;
+import com.bbar.game.calendar.service.CalendarService;
 import com.bbar.game.post.dto.BoardDTO;
 import com.bbar.game.post.service.PostService;
 
@@ -21,10 +25,12 @@ import jakarta.servlet.http.HttpSession;
 public class PostController {
 	
 	private PostService postService; 
+	private CalendarService calendarService;
 	
 	
-	public PostController(PostService postService) {
+	public PostController(PostService postService, CalendarService calendarService) {
 		this.postService = postService;
+		this.calendarService = calendarService;
 	}
 	
 	@GetMapping("/profile")
@@ -85,8 +91,14 @@ public class PostController {
 	}
 	
 	@GetMapping("/calendar-view")
-	public String calendar() {
+	public String getCalendar() {
 		return "post/calendar";
+	}
+	
+	@GetMapping("/calendar-data")
+	@ResponseBody
+	public List<CalendarDTO> getCalendarData() {
+	    return calendarService.getSchedule();
 	}
 	
 	
