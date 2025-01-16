@@ -17,6 +17,7 @@ import com.bbar.game.calendar.DTO.CalendarDTO;
 import com.bbar.game.calendar.service.CalendarService;
 import com.bbar.game.post.dto.BoardDTO;
 import com.bbar.game.post.service.PostService;
+import com.bbar.game.videoPost.service.VideoPostService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -26,11 +27,14 @@ public class PostController {
 	
 	private PostService postService; 
 	private CalendarService calendarService;
+	private VideoPostService videoPostService; 
 	
 	
-	public PostController(PostService postService, CalendarService calendarService) {
+	public PostController(PostService postService, CalendarService calendarService
+			, VideoPostService videoPostService) {
 		this.postService = postService;
 		this.calendarService = calendarService;
+		this.videoPostService = videoPostService;
 	}
 	
 	@GetMapping("/profile")
@@ -82,7 +86,6 @@ public class PostController {
 		model.addAttribute("startPage", startPage);
     	model.addAttribute("endPage", endPage);
 		return "post/list";
-		
 	}
 	
 	@GetMapping("/video/url-view")
@@ -101,7 +104,43 @@ public class PostController {
 	    return calendarService.getSchedule();
 	}
 	
+	@GetMapping("/video-list")
+	public String videoPaging(
+			@PageableDefault(page = 1) Pageable pageable
+			, Model model
+			, HttpSession session) {
+		
+		Integer userId = (Integer) session.getAttribute("userId");
+		
+		Page<BoardDTO> postPage = videoPostService.paging(pageable);
+
+		LocalDate localDate = LocalDate.now();
+		model.addAttribute("localDate", localDate);
+		
+		int blockLimit = 3;
+		int startPage = ((pageable.getPageNumber() - 1) / blockLimit) * blockLimit + 1;
+		int endPage = Math.min((startPage + blockLimit - 1), postPage.getTotalPages());
+		
+		model.addAttribute("postPage", postPage);
+		model.addAttribute("startPage", startPage);
+    	model.addAttribute("endPage", endPage);
+		return "post/videoList";
+	}
 	
+	@GetMapping("/video-input")
+	public String inputVideo() {
+		return "post/videoUrl";
+	}
+	
+	@GetMapping("/detail-video/{id}")
+	public String deatailVideo(@PathVariable("id") int id
+			, Model model
+			, HttpSession session) {
+		Integer userId = (Integer) session.getAttribute("userId");
+		BoardDTO post = videoPostService.getVideoPost(id, userId);
+		model.addAttribute("post", post);
+		return "post/videoDetail";
+	}
 	
 
 }

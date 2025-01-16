@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko" 
+    xmlns:th="http://www.thymeleaf.org" 
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/default}">
+        
+        <section layout:fragment="contents" class="contents d-flex justify-content-center mb-5">
+			<div class="default-box rounded my-1">
+				<h4 class="ml-2 mt-2">글쓰기</h4>
+				<hr>
+				<div class="p-5">
+				
+					<!-- 제목 -->
+					<h5>제목</h5>
+					<input type="text" class="form-control" id=titleInput placeholder="제목을 입력하세요">
+					<br>
+					
+					<!-- url -->
+					<h5 class="bold">url</h5>
+						<input type="text" class="form-control mt-2 urlInput" placeholder="Youtube 링크를 입력하세요">					
+					<div class="d-flex justify-content-end">	
+						<button class= "btn mt-4 ml-2 default-button text-white" id="saveBtn">게시</button>	
+					</div>
+				</div>
+			</div>	
+		</section>
+        
+        <script layout:fragment="script">
+			$(document).ready(function(){
+					$("#saveBtn").on("click", function(){
+					
+						let title = $("#titleInput").val();
+        				let url = $(".urlInput").val();
+        				let urlId = url.split("?v=")[1];
+        				let thumbnail = "https://img.youtube.com/vi/" + urlId + "/0.jpg";
+        				
+	        			if(title == "") {
+							alert("제목을 입력해주세요.");
+							return;
+						}
+	        			
+	        			if(url == "") {
+							alert("url을 입력해주세요.");
+							return;
+						}
+
+        			$.ajax({
+        				type:"post"
+        				, url: "/post/video/create"
+        				, data:{"title":title, "youtubeUrl":urlId, "thumbnailUrl": thumbnail}
+        				, success:function(response) {
+        					if(response.result == "success") {
+        						location.href = "/post/video-list"
+							} else {
+								alert("등록 실패");
+							}
+        				}
+        				,error:function() {
+        					alert("등록 에러!");	
+        				}
+        				 
+        			});
+				});
+			});
+			
+		</script>
+
+
+</html>

@@ -23,7 +23,8 @@ public class WebMyConfig implements WebMvcConfigurer {
 		registry.addInterceptor(new PermissionInterceptor())
 		.addPathPatterns("/**")
 		.excludePathPatterns("/user/logout", "/static/**", "/images/**", "/post/list-view", "/post/calendar-view"
-				,"/post/calendar-data", "/post/detail-view/{id}");
+				,"/post/calendar-data", "/post/detail-view/{id}", "/post/video-list", "/post/detail-video/{id}"
+				, "/user/edit-profile");
 	}
 	
 	

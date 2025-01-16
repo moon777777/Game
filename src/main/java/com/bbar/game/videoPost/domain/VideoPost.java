@@ -1,9 +1,11 @@
-package com.bbar.game.post.domain;
+package com.bbar.game.videoPost.domain;
 
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.bbar.game.post.domain.Post;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,9 +22,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Table(name="`post`")
+@Table(name="`vpost`")
 @Entity
-public class Post {
+public class VideoPost {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -30,12 +32,12 @@ public class Post {
 	@Column(name="userId")
 	private int userId;
 	private String title;
-	private String contents;
 	@Column(name="youtubeUrl")
 	private String youtubeUrl;
 	@CreationTimestamp
 	@Column(name="createdAt")
 	private LocalDateTime createdAt;
+	private String thumbnail;
 	
 	@UpdateTimestamp
 	@Column(name="updatedAt")
@@ -44,5 +46,4 @@ public class Post {
 	@Column(name="viewCount")
 	private int viewCount;
 
-	
 }

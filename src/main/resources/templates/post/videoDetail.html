@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko" 
+    xmlns:th="http://www.thymeleaf.org" 
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/default}">
+        
+        <section layout:fragment="contents" class="contents d-flex justify-content-center mb-5">
+        <!-- 게시글 -->
+			<div class="default-box rounded my-1" th:data-post-id="${post.postId}">
+				<div class="d-flex justify-content-between align-items-center">
+					<h5 class="ml-2 mt-2" th:text="${post.title}">제목</h5>
+					<i class="bi bi-three-dots mr-3 option" th:if="${post.userId == session.userId}"></i>
+					<div class="option-menu d-none">
+						<a th:href="@{/post/update/{postId}(postId=${post.postId})}" class="option-btn text-white">게시물 수정</a>
+						<button class="deleteBtn" th:data-post-id="${post.postId}">게시물 삭제</button>
+					</div>									
+				</div>
+				<hr>
+				<div class="d-flex p-2">
+					<div class="miniProfile-box d-flex ml-2">
+						<img th:unless="${post.imagePath == null}" th:src="${post.imagePath}">
+						<img th:if="${post.imagePath == null}" src="/static/images/default_img.webp">
+					</div>
+					<div>
+						<div class="mt-1 ml-2"><b th:text="${post.nickname}"></b></div>
+						<div class="ml-2 small" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></div>	
+					</div>
+				</div>
+				<div class="content-font mt-1 ml-4 p-2" th:text="${post.contents}">
+					내용
+				</div>
+				<div class="ml-4" th:if="${post.youtubeUrl}">
+				    <iframe th:src="'https://www.youtube.com/embed/' + ${post.youtubeUrl}" 
+				    	width="560" height="315" frameborder="0" allowfullscreen>
+				    </iframe>
+				</div>
+				<div class="d-flex justify-content-between">
+					<div class="p-2 ml-4 d-flex">
+						<h4 class="mt-2"><i class="bi bi-eye-fill"></i></h4>
+						<span class="viewNum ml-2" th:text="${post.viewCount}"></span>
+					</div>
+					<div class="d-flex p-2">
+						<h4><i th:if="${post.isLike}" class="bi bi-hand-thumbs-up-fill ml-4 unlikeBtn" th:data-type="videoPost" th:data-post-id="${post.postId}"></i></h4>
+						<h4><i th:unless="${post.isLike}" class="bi bi-hand-thumbs-up ml-4 likeBtn" th:data-type="videoPost" th:data-post-id="${post.postId}"></i></h4>
+						<span th:text="${post.likeCount}" class="ml-1 mt-1 mr-4"></span>
+					</div>				
+				</div>
+			</div>
+		</section>
+		
+		 <script layout:fragment="script">
+			$(document).ready(function(){
+				
+				$(".unlikeBtn").on("click", function(){
+					let targetType = $(this).data("type");
+        			let targetId = $(this).data("post-id");
+        			
+        			$.ajax({
+        				type:"delete"
+        				, url:"/post/unlike"
+        				, data:{"targetType": targetType 
+        		            , "targetId": targetId}
+        				, success:function(response) {
+        					if(response.result == "success") {
+        						location.reload();
+        					} else {
+        						alert("좋아요 취소 실패")
+        					}
+        				}
+        				, error:function() {
+        					alert("삭제 에러");
+        				}
+        			});		
+        		});
+				
+				$(".likeBtn").on("click", function(){
+					let targetType = $(this).data("type");
+        			let targetId = $(this).data("post-id");
+        			
+        			$.ajax({
+        				type:"post"
+        				, url: "/post/like"
+        				, data:{"targetType": targetType 
+        		            , "targetId": targetId }
+        				, success:function(response) {
+        					if(response.result == "success") {
+								location.reload();
+							} else {
+								alert("좋아요 실패");
+							}
+        				}
+        				,error:function() {
+        					alert("좋아요 에러!");	
+        				}
+        				 
+        			});
+        		});
+			});
+		</script>
+        
+</html>
