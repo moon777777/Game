@@ -1,12 +1,17 @@
 package com.bbar.game.videoPost.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bbar.game.like.service.LikeService;
+import com.bbar.game.post.domain.Post;
 import com.bbar.game.post.dto.BoardDTO;
 import com.bbar.game.user.domain.User;
 import com.bbar.game.user.service.UserService;
@@ -42,6 +47,30 @@ public class VideoPostService {
 		} else {
 			return false;
 		}
+	}
+	
+	public boolean updateVideoPost(int id, String title, int userId, String youtubeUrl) {
+		
+		Optional<VideoPost> optionalVideoPost = videoPostRepository.findById(id);
+		
+		if(optionalVideoPost.isPresent()) {
+			VideoPost videoPost = optionalVideoPost.get();
+
+			if(videoPost.getUserId() == userId) {			
+				videoPost = videoPost.toBuilder()
+				.title(title)
+				.youtubeUrl(youtubeUrl)
+				.build();
+				
+				videoPostRepository.save(videoPost);
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+			
 	}
 	
 	public Page<BoardDTO> paging(Pageable pageable) {

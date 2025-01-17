@@ -93,6 +93,16 @@ public class PostController {
 		return "post/url";
 	}
 	
+	@GetMapping("/video/url-update/{postId}")
+	public String updateYoutube(@PathVariable("postId") int postId
+			, Model model
+			, HttpSession session) {
+		Integer userId = (Integer) session.getAttribute("userId");
+		BoardDTO post = postService.getPost(postId, userId);
+		model.addAttribute("post", post);
+		return "post/urlUpdate";
+	}
+	
 	@GetMapping("/calendar-view")
 	public String getCalendar(HttpSession session) {
 		return "post/calendar";
@@ -140,6 +150,17 @@ public class PostController {
 		BoardDTO post = videoPostService.getVideoPost(id, userId);
 		model.addAttribute("post", post);
 		return "post/videoDetail";
+	}
+	
+	@GetMapping("/video-update/{postId}")
+	public String updatevideo(@PathVariable("postId") int postId
+			, Model model
+			, HttpSession session) {
+		
+		Integer userId = (Integer) session.getAttribute("userId");
+		BoardDTO post = videoPostService.getVideoPost(postId, userId);
+		model.addAttribute("post", post);
+		return "post/videoUpdate";
 	}
 	
 

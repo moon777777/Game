@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko" 
+    xmlns:th="http://www.thymeleaf.org" 
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/default}">
+        
+        <section layout:fragment="contents" class="contents d-flex justify-content-center mb-5">
+			<div class="default-box rounded my-1" id="updateContents" th:data-post-id="${post.postId}">
+				<h4 class="ml-2 mt-2">글쓰기</h4>
+				<hr>
+				<div class="p-5">
+				
+					<!-- 제목 -->
+					<h5>제목</h5>
+					<input type="text" class="form-control" id=titleInput placeholder="제목을 입력하세요" th:value="${post.title}">
+					<br>
+					
+					<!-- url -->
+					<h5 class="bold">url</h5>
+						<input type="text" class="form-control mt-2 urlInput" placeholder="Youtube 링크를 입력하세요" th:value="|https://www.youtube.com/watch?v=${post.youtubeUrl}|">					
+					<div class="d-flex justify-content-end">	
+						<button class= "btn mt-4 ml-2 default-button text-white" id="updateBtn">수정</button>	
+					</div>
+				</div>
+			</div>	
+		</section>
+		
+		<script layout:fragment="script">
+			$(document).ready(function(){
+				
+				$("#updateBtn").on("click", function(){
+					
+					let title = $("#titleInput").val();
+					let url = $(".urlInput").val();
+					let id = $("#updateContents").data("post-id");
+					let urlId = url.split("?v=")[1];
+					
+					if(title == "") {
+						alert("제목을 입력해주세요");
+						return;
+					}
+					
+					if(urlId == "") {
+						alert("url을 입력해주세요");
+						return;
+					}
+					
+					$.ajax({
+						type: "put"
+						, url: "/post/video/update"
+						, data: {"id":id,"title":title, "youtubeUrl":urlId}
+						, success:function(response) {
+							if(response.result == "success"){
+								location.href="/post/detail-video/" + id;
+							} else{
+								alert("수정 실패");
+							}
+						}
+						, error:function(){
+							alert("수정 에러");
+						}
+					});
+						
+				});
+			});
+		</script>

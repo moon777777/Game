@@ -73,10 +73,7 @@
 	            	        dataType: 'json',
 	            	        success: function(data) {
 	            	        	
-	            	        	console.log(data);
 	            	        	let events = data.map(function(event) {
-	            	        		console.log(event);
-	            	        		
 	            	                return {
 	            	                	title: event.title,
 	                                    start: event.startDate, 

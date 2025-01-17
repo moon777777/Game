@@ -15,7 +15,7 @@
 					
 					<div th:if="${post.youtubeUrl != null}">
 						<h5 class="bold">url</h5>
-							<input type="text" th:value="|https://www.youtube.com/watch?v=${post.youtubeUrl}|" class="form-control mt-2 urlInput" placeholder="Youtube 링크를 입력하세요">									
+						<input type="text" th:value="|https://www.youtube.com/watch?v=${post.youtubeUrl}|" class="form-control mt-2 urlInput" placeholder="Youtube 링크를 입력하세요">									
 					</div>
 					
 					<h5 class="mt-3">내용</h5>
@@ -28,7 +28,7 @@
     						<input type="file" id="fileInput" class="d-none" multiple>
     						<div id="fileInfo" class="ml-2" style="max-width: 200px; white-space: normal; overflow: hidden;  word-wrap: break-word;"></div>									
 						</div>	
-						<button class= "btn mt-4 ml-2 default-button text-white" id="updateBtn">게시</button>	
+						<button class= "btn mt-4 ml-2 default-button text-white" id="updateBtn">수정</button>	
 					</div>
 					<div class = "mt-4" th:each="image : ${post.imageFiles}">
 						<h4><i class="bi bi-x text-danger imgDeleteBtn" th:data-image-id="${image.imageId}"></i></h4>
@@ -90,8 +90,13 @@
 					let title = $("#titleInput").val();
 					let contents = $("#contentsInput").val();
 					let files = $("#fileInput")[0].files;
-					let url = $(".urlInput").val();
-    				let urlId = url.split("?v=")[1];
+					
+			        let url = $(".urlInput").val();
+			        let urlId = "";
+			        if (url && url.includes("?v=")) {
+			            urlId = url.split("?v=")[1];
+			        }			
+    				
 					
 					if(title == "") {
 						alert("제목을 입력해주세요");
@@ -111,7 +116,9 @@
 					let formData = new FormData();
 					formData.append("title", title);
 					formData.append("contents", contents);
-					formData.append("youtubeUrl", urlId);
+					if (urlId) {
+				        formData.append("youtubeUrl", urlId);
+				    }
 					
 					if (files.length > 0) {
 				        for (let i = 0; i < files.length; i++) {
