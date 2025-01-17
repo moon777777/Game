@@ -93,16 +93,6 @@ public class PostController {
 		return "post/url";
 	}
 	
-	@GetMapping("/video/url-update/{postId}")
-	public String updateYoutube(@PathVariable("postId") int postId
-			, Model model
-			, HttpSession session) {
-		Integer userId = (Integer) session.getAttribute("userId");
-		BoardDTO post = postService.getPost(postId, userId);
-		model.addAttribute("post", post);
-		return "post/urlUpdate";
-	}
-	
 	@GetMapping("/calendar-view")
 	public String getCalendar(HttpSession session) {
 		return "post/calendar";

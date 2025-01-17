@@ -73,6 +73,27 @@ public class VideoPostService {
 			
 	}
 	
+	public boolean deleteVideoPost(int id, int userId) {
+		
+		Optional<VideoPost> optionalVideoPost = videoPostRepository.findById(id);
+		
+		if(optionalVideoPost.isPresent()) {
+			VideoPost videoPost = optionalVideoPost.get();
+
+			if(videoPost.getUserId() == userId) {			
+				likeService.deleteLikeByTargetId("videoPost", id);
+
+				videoPostRepository.delete(videoPost);
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+			
+	}
+	
 	public Page<BoardDTO> paging(Pageable pageable) {
 		int page = pageable.getPageNumber() - 1;
 		int pageLimit = 10;
