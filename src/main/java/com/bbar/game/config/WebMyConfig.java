@@ -24,7 +24,7 @@ public class WebMyConfig implements WebMvcConfigurer {
 		.addPathPatterns("/**")
 		.excludePathPatterns("/user/logout", "/static/**", "/images/**", "/post/list-view", "/post/calendar-view"
 				,"/post/calendar-data", "/post/detail-view/{id}", "/post/video-list", "/post/detail-video/{id}"
-				, "/user/edit-profile");
+				, "/user/edit-profile", "/post/popular-view");
 	}
 	
 	

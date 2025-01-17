@@ -107,11 +107,8 @@ public class PostController {
 	@GetMapping("/video-list")
 	public String videoPaging(
 			@PageableDefault(page = 1) Pageable pageable
-			, Model model
-			, HttpSession session) {
-		
-		Integer userId = (Integer) session.getAttribute("userId");
-		
+			, Model model) {
+
 		Page<BoardDTO> postPage = videoPostService.paging(pageable);
 
 		LocalDate localDate = LocalDate.now();
@@ -151,6 +148,16 @@ public class PostController {
 		BoardDTO post = videoPostService.getVideoPost(postId, userId);
 		model.addAttribute("post", post);
 		return "post/videoUpdate";
+	}
+	
+	@GetMapping("/popular-view")
+	public String getPopular(Pageable pageable, Model model) {
+		
+		Page<BoardDTO> popularPage = postService.getPopularList(pageable);
+		
+		model.addAttribute("popularPage", popularPage);
+		
+		return "main/popular";
 	}
 	
 

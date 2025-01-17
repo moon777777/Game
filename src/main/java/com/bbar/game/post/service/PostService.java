@@ -1,5 +1,6 @@
 package com.bbar.game.post.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -121,36 +122,43 @@ public class PostService {
 		}		
 	}
 	
-//	public List<BoardDTO> getPostList(){
-//		List<Post> postList =  postRepository.findAllByOrderByIdDesc();
-//		
-//		List<BoardDTO> boardList = new ArrayList<>();
-//		
-//		for(Post post:postList) {
-//			int userId = post.getUserId();
-//			User user = userService.getUser(userId);
-//			int likeCount = likeService.getLikeCount("post", post.getId());
-//			int commentCount = commentService.getCommentCount(post.getId());
-//			int repliesCount = repliesService.countReplies(post.getId());
-//			
-//			BoardDTO board = BoardDTO.builder()
-//			.postId(post.getId())
-//			.userId(userId)
-//			.title(post.getTitle())
-//			.contents(post.getContents())
-//			.imagePath(user.getImagePath())
-//			.nickname(user.getNickname())
-//			.createdAt(post.getCreatedAt())
-//			.likeCount(likeCount)
-//			.commentCount(commentCount + repliesCount)
-//			.viewCount(post.getViewCount())
-//			.build();
-//			
-//			boardList.add(board);
-//		}
-//		
-//		return boardList;
-//	}
+	public Page<BoardDTO> getPopularList(Pageable pageable){
+		int page = pageable.getPageNumber();
+		int pageLimit = 10;
+		
+		Pageable usePageable = PageRequest.of(page, pageLimit, Sort.by("id").descending());
+		
+		Page<Post> boardPage = postRepository.findPopular(usePageable);
+		
+		return boardPage.map(post -> {
+			int userId = post.getUserId();
+			User user = userService.getUser(userId);
+			int likeCount = likeService.getLikeCount("post", post.getId());
+			int commentCount = commentService.getCommentCount(post.getId());
+			int repliesCount = repliesService.countReplies(post.getId());
+			boolean isLike = false;
+
+			List<ImagesDTO> imagesList = imagesService.getImages(post.getId());
+			
+			BoardDTO board = BoardDTO.builder()
+			.postId(post.getId())
+			.userId(userId)
+			.title(post.getTitle())
+			.contents(post.getContents())
+			.nickname(user.getNickname())
+			.imagePath(user.getImagePath())
+			.createdAt(post.getCreatedAt())
+			.likeCount(likeCount)
+			.commentCount(commentCount + repliesCount)
+			.viewCount(post.getViewCount())
+			.imageFiles(imagesList)
+			.youtubeUrl(post.getYoutubeUrl())
+			.isLike(isLike)
+			.build();
+			
+			return board;
+		});
+	}
 	
 	public BoardDTO getPost(int id, Integer userId) {
 		Post post = postRepository.findById(id).orElse(null);
