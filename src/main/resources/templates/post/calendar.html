@@ -65,13 +65,24 @@
 	             var calendar = new FullCalendar.Calendar(calendarEl, {
 	               initialView: 'dayGridMonth',
 	               editable: true, // 편집을 허용하겠다
-	               // 수정
+	               
+	               eventMouseEnter: function(info) {
+	                   let contents = info.event.extendedProps.contents;
+	                   if (contents) {
+	                       // 기본 title 속성으로 툴팁을 표시
+	                       $(info.el).attr('title', contents);
+	                   }
+	               },
+
+	               
+	               // 수정 실패..
 	               eventDrop: function(info) {
-	                   let userId = document.getElementById('userId').innerText;
-	                   let eventId = info.event.scheduleId;
+	                /**   let userId = document.getElementById('userId').innerText;
+	                   let eventId = info.event.id;
 	                   let updateStart = info.event.start;	
 	                   let updateEnd = info.event.end;
-					   alert(userId);
+	                   
+					   
 	                   if (userId === "5") {  
 	                       $.ajax({
 	                           type: "put",
@@ -86,16 +97,15 @@
 	                                   alert("일정이 수정되었습니다");
 	                               } else {
 	                                   alert("수정 실패");
-	                                   info.revert();
 	                               }
 	                           },
 	                           error: function() {
 	                               alert("수정 에러");
 	                           }
 	                       });
-	                   }
+	                   } **/
 	               },
-	               
+
 	               // 삭제
 	               eventClick: function(info) {
 	            	   let userId = document.getElementById('userId').innerText;
@@ -160,6 +170,7 @@
 	             });
 	             calendar.render();
 	           });
+	         
 	         
 	         function getRandomColor() {
 	        	    const letters = '0123456789ABCDEF';
