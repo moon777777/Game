@@ -19,7 +19,16 @@ hr {
 
 .ui-datepicker-calendar>thead>tr>th:last-child { color: #0099ff !important; }   
 .ui-datepicker-calendar>tbody>tr>td:last-child a { color: #0099ff !important; } 
-    
+
+.fc-day-sun .fc-col-header-cell-cushion,
+.fc-day-sun a {
+    color: red !important;
+}
+
+.fc-day-sat .fc-col-header-cell-cushion,
+.fc-day-sat a {
+    color :  #0099ff !important;
+}
 
 a:hover {
         text-decoration: none;

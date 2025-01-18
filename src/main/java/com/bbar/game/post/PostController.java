@@ -101,6 +101,7 @@ public class PostController {
 	@GetMapping("/calendar-data")
 	@ResponseBody
 	public List<CalendarDTO> getCalendarData() {
+
 	    return calendarService.getSchedule();
 	}
 	

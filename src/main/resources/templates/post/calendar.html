@@ -12,8 +12,10 @@
 			        <h5><a href="/post/calendar-view" class="text-white ml-4">픽업 기간</a></h5>
 			    </nav>
 			    <hr>
-			    <button class="btn ml-3 mt-2 text-white eventBtn" id="addEventBtn" data-toggle="modal" data-target="#updateModal">일정 추가</button>
+			    <button class="btn ml-3 mt-2 text-white eventBtn" id="addEventBtn" data-toggle="modal" data-target="#updateModal" th:if="${session.userId} == 5">일정 추가</button>
          		<div class="p-3" id='calendar'></div>
+         		<span id="userId" th:text="${session.userId}" class="d-none"></span>
+         		
          	</div>
          	
          	<!-- modal -->
@@ -62,23 +64,89 @@
 	             var calendarEl = document.getElementById('calendar');
 	             var calendar = new FullCalendar.Calendar(calendarEl, {
 	               initialView: 'dayGridMonth',
+	               editable: true, // 편집을 허용하겠다
+	               // 수정
+	               eventDrop: function(info) {
+	                   let userId = document.getElementById('userId').innerText;
+	                   let eventId = info.event.scheduleId;
+	                   let updateStart = info.event.start;	
+	                   let updateEnd = info.event.end;
+					   alert(userId);
+	                   if (userId === "5") {  
+	                       $.ajax({
+	                           type: "put",
+	                           url: "/post/schedule/update", 
+	                           data: {
+	                               "id": eventId,
+	                               "startDate": updateStart,
+	                               "endDate": updateEnd
+	                           },
+	                           success: function(response) {
+	                               if(response.result == "success") {
+	                                   alert("일정이 수정되었습니다");
+	                               } else {
+	                                   alert("수정 실패");
+	                                   info.revert();
+	                               }
+	                           },
+	                           error: function() {
+	                               alert("수정 에러");
+	                           }
+	                       });
+	                   }
+	               },
+	               
+	               // 삭제
+	               eventClick: function(info) {
+	            	   let userId = document.getElementById('userId').innerText;
+	            	   let eventId = info.event.id;
+	            	   let deleteConfirm = confirm("일정을 삭제하시겠습니까?");
+	            	   if (userId === "5") {
+	            		   if(deleteConfirm) {
+		            		   $.ajax({
+		            			   type: "delete"
+		            			   , url: "/post/schedule/delete"
+		            			   , data: {"id": eventId}
+		            		   	   ,  success: function(response) {
+		            	                if(response.result == "success") {
+		            	                	alert("일정이 삭제되었습니다");
+		            	                	location.reload();
+		            	                } else {
+		            	                	alert("삭제 실패");
+		            	                	info.revert();
+		            	                }
+		            		   	   }
+		            		   	   , error:function(){
+		            		   		   alert("삭제 에러");
+		            		   	   }            		   	   
+		            		   });
+		            	   }
+	            			   
+	            		   }
+	               },
+	               // 조회
 	               events: function(info, successCallback, failureCallback){
 	            	   $.ajax({
-	            		   type: 'get',
-	            		   url: '/post/calendar-data',
+	            		   type: "get",
+	            		   url: "/post/calendar-data",
 	            		   data: {
 	            	            start: info.startStr,
 	            	            end: info.endStr
 	            	        },
-	            	        dataType: 'json',
+	            	        dataType: "json",
 	            	        success: function(data) {
 	            	        	
 	            	        	let events = data.map(function(event) {
+	            	        		 let eventColor = getRandomColor();  
 	            	                return {
+	            	                	id: event.scheduleId,
 	            	                	title: event.title,
 	                                    start: event.startDate, 
 	                                    end: event.endDate,
-	                                    contents: event.contents
+	                                    contents: event.contents,
+	                                    backgroundColor: eventColor,
+	                                    borderColor: eventColor,
+	                                    textColor: "black"
 	            	                }
 	            	        	});
 	            	        	successCallback(events);
@@ -92,6 +160,15 @@
 	             });
 	             calendar.render();
 	           });
+	         
+	         function getRandomColor() {
+	        	    const letters = '0123456789ABCDEF';
+	        	    let color = '#';
+	        	    for (let i = 0; i < 6; i++) {
+	        	        color += letters[Math.floor(Math.random() * 16)];
+	        	    }
+	        	    return color;
+	        	}
 	         
 	         $("document").ready(function(){
 	        	 
