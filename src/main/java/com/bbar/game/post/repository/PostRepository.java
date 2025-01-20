@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.bbar.game.post.domain.Post;
+import com.bbar.game.post.dto.BoardDTO;
 
 import jakarta.transaction.Transactional;
 
@@ -26,5 +27,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 	
 	@Query(value = "SELECT * FROM post WHERE viewCount >= 50", nativeQuery = true)
 	public Page<Post> findPopular(Pageable pageable);
+	
+	public Page<Post> findByTitleContaining(String title, Pageable pageable);
 
 }

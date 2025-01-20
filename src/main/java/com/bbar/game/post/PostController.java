@@ -5,16 +5,19 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bbar.game.calendar.DTO.CalendarDTO;
 import com.bbar.game.calendar.service.CalendarService;
+import com.bbar.game.post.domain.Post;
 import com.bbar.game.post.dto.BoardDTO;
 import com.bbar.game.post.service.PostService;
 import com.bbar.game.videoPost.service.VideoPostService;
@@ -87,6 +90,25 @@ public class PostController {
     	model.addAttribute("endPage", endPage);
 		return "post/list";
 	}
+	
+	@GetMapping("/search")
+    public String search(
+            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword
+            , Pageable pageable
+            , Model model) {
+
+        Page<BoardDTO> postPage = postService.searchPaging(keyword, pageable);
+        
+        int blockLimit = 3;
+		int startPage = ((pageable.getPageNumber() - 1) / blockLimit) * blockLimit + 1;
+		int endPage = Math.min((startPage + blockLimit - 1), postPage.getTotalPages());
+		
+		model.addAttribute("startPage", startPage);
+    	model.addAttribute("endPage", endPage);
+        model.addAttribute("postPage", postPage);
+        
+        return "post/search";
+    }
 	
 	@GetMapping("/video/url-view")
 	public String inputYoutube() {

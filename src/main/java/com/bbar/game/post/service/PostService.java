@@ -1,6 +1,5 @@
 package com.bbar.game.post.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -237,5 +236,42 @@ public class PostService {
 			return board;
 		});
 	}
+	
+	
+	public Page<BoardDTO> searchPaging(String title, Pageable pageable) {
+		int page = pageable.getPageNumber();
+		int pageLimit = 10;
+		
+		Pageable usePageable = PageRequest.of(page, pageLimit, Sort.by("id").descending());
+		
+		Page<Post> boardPage = postRepository.findByTitleContaining(title, usePageable);
+		
+		return boardPage.map(post -> {
+			int userId = post.getUserId();
+			User user = userService.getUser(userId);
+			int likeCount = likeService.getLikeCount("post", post.getId());
+			int commentCount = commentService.getCommentCount(post.getId());
+			int repliesCount = repliesService.countReplies(post.getId());
+			
+			List<ImagesDTO> imagesList = imagesService.getImages(post.getId());
+			
+			BoardDTO board = BoardDTO.builder()
+			.postId(post.getId())
+			.userId(userId)
+			.title(post.getTitle())
+			.contents(post.getContents())
+			.nickname(user.getNickname())
+			.createdAt(post.getCreatedAt())
+			.likeCount(likeCount)
+			.commentCount(commentCount + repliesCount)
+			.viewCount(post.getViewCount())
+			.imageFiles(imagesList)
+			.youtubeUrl(post.getYoutubeUrl())
+			.build();
+			
+			return board;
+		});
+	}
+
 
 }

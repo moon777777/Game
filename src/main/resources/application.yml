@@ -32,7 +32,13 @@ spring:
                     auth: true
                     starttls:
                         enable: true
-                        required: true
+                        required: true									
 mybatis:
     mapper-locations: mappers/*Mapper.xml
+
+oauth:
+    kakao:
+        client_id: 604155842786680a63fcda5b5219c026
+        redirect_uri: http://localhost:8080/auth/login/kakao
+
 

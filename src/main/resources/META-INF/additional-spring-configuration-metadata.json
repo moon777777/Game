@@ -1,5 +1,17 @@
-{"properties": [{
-  "name": "mybatis.servlet.multipart.enabled",
-  "type": "java.lang.String",
-  "description": "A description for 'mybatis.servlet.multipart.enabled'"
-}]}
+{"properties": [
+  {
+    "name": "mybatis.servlet.multipart.enabled",
+    "type": "java.lang.String",
+    "description": "A description for 'mybatis.servlet.multipart.enabled'"
+  },
+  {
+    "name": "mybatis.kakao.redirect_uri",
+    "type": "java.lang.String",
+    "description": "A description for 'mybatis.kakao.redirect_uri'"
+  },
+  {
+    "name": "mybatis.kakao.client_id",
+    "type": "java.lang.String",
+    "description": "A description for 'mybatis.kakao.client_id'"
+  }
+]}
