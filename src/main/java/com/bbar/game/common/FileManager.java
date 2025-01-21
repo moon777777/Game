@@ -18,6 +18,7 @@ public static final String FILE_UPLOAD_PATH = "C:\\Moon777\\SpringProject\\uploa
 			return null;
 		}
 		
+		
 		String directoryName = "/" + userId + "_" + System.currentTimeMillis();
 		String directoryPath = FILE_UPLOAD_PATH + directoryName;
 		
