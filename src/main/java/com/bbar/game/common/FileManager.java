@@ -19,6 +19,7 @@ public static final String FILE_UPLOAD_PATH = "/home/ec2-user/upload/zzz";
 			return null;
 		}
 		
+		
 		String directoryName = "/" + userId + "_" + System.currentTimeMillis();
 		String directoryPath = FILE_UPLOAD_PATH + directoryName;
 		
