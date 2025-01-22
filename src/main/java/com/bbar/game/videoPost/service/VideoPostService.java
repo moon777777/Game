@@ -34,7 +34,7 @@ public class VideoPostService {
 	
 	public boolean addVideoPost(int userId, String title, String youtubeUrl, String thumbnailUrl) {
 		
-		if(userId == 5) {
+		if(userId == 1) {
 			VideoPost videoPost = VideoPost.builder()
 			.userId(userId)
 			.title(title)
