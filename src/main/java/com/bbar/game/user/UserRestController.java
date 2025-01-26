@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bbar.game.common.FileManager;
 import com.bbar.game.user.domain.User;
 import com.bbar.game.user.service.UserService;
 
@@ -125,13 +126,17 @@ public class UserRestController {
 		int userId = (Integer)session.getAttribute("userId");
 		
 		Map<String, String> resultMap = new HashMap<>();
+		String filePath = FileManager.saveFile(userId, file);
+		
 		if(userService.updateFile(userId, file)) {
+			session.setAttribute("userProfile", filePath); 
 			resultMap.put("result", "success");
 		} else {
 			resultMap.put("result", "fail");
 		}
 		return resultMap;
 	}
+
 	
 	@PostMapping("/password/change")
 	public Map<String, String> chagnePassword(

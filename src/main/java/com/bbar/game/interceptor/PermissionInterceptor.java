@@ -21,6 +21,12 @@ public class PermissionInterceptor implements HandlerInterceptor {
 		Integer userId = (Integer)session.getAttribute("userId");
 		
 		String uri = request.getRequestURI();
+		String method = request.getMethod(); 
+
+		if ("PUT".equals(method)) {
+	        return true;
+	    }
+		
 		
 		if(userId == null) {
 			if(uri.startsWith("/post")) {
