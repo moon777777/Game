@@ -110,7 +110,7 @@ public class UserRestController {
 		Map<String, String> resultMap = new HashMap<>();
 		
 		if(userService.updateNickname(userId, nickname)) {
-			session.setAttribute("userNickname", nickname); 
+			session.setAttribute("userNickname", nickname);
 			resultMap.put("result", "success");
 		} else {
 			resultMap.put("result", "fail");

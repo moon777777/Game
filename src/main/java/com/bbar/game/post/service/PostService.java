@@ -20,6 +20,7 @@ import com.bbar.game.post.dto.BoardDTO;
 import com.bbar.game.post.repository.PostRepository;
 import com.bbar.game.replies.service.RepliesService;
 import com.bbar.game.user.domain.User;
+import com.bbar.game.user.repository.UserRepository;
 import com.bbar.game.user.service.UserService;
 
 import jakarta.transaction.Transactional;
@@ -32,18 +33,21 @@ public class PostService {
 	private LikeService likeService;
 	private CommentService commentService;
 	private RepliesService repliesService;
-	private ImagesService imagesService; 
+	private ImagesService imagesService;
+	private UserRepository userRepository;
 	
 	public PostService(PostRepository postRepository, UserService userService
 			, LikeService likeService, CommentService commentService
 			, RepliesService repliesService
-			, ImagesService imagesService) {
+			, ImagesService imagesService
+			, UserRepository userRepository) {
 		this.postRepository = postRepository;
 		this.userService = userService;
 		this.likeService = likeService;
 		this.commentService = commentService;
 		this.repliesService = repliesService;
 		this.imagesService = imagesService;
+		this.userRepository = userRepository;
 	}
 	
 	@Transactional
