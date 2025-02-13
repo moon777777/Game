@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,13 @@ import jakarta.mail.internet.MimeMessage;
 public class MailService {
 	
     private final JavaMailSender javaMailSender;
+    private RedisTemplate<String, String> redisTemplate;
     private static final String senderEmail = "moonyj6380@gmail.com";
     private int number;
 
-    public MailService(JavaMailSender javaMailSender) {
+    public MailService(JavaMailSender javaMailSender, RedisTemplate<String, String> redisTemplate) {
         this.javaMailSender = javaMailSender;
+        this.redisTemplate = redisTemplate;
     }
     
     private Map<String, Integer> emailCode = new HashMap<>();
@@ -55,13 +58,14 @@ public class MailService {
     public int sendMail(String mail) {
         MimeMessage message = createMail(mail);
         javaMailSender.send(message); // 결국 얘를 호출
-        emailCode.put(mail, number);
+//        emailCode.put(mail, number);
+        redisTemplate.opsForValue().set(mail, String.valueOf(number));
         return number;
     }
     
     public boolean verifyCode(String email, int code) {
-    	Integer getCode = emailCode.get(email);
-    	return getCode != null && getCode == code;
+    	String storedCode = redisTemplate.opsForValue().get(email);
+        return storedCode != null && Integer.parseInt(storedCode) == code;
     }
 
 }
