@@ -1,5 +1,6 @@
 package com.bbar.game.mail;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -59,7 +60,7 @@ public class MailService {
         MimeMessage message = createMail(mail);
         javaMailSender.send(message); // 결국 얘를 호출
 //        emailCode.put(mail, number);
-        redisTemplate.opsForValue().set(mail, String.valueOf(number));
+        redisTemplate.opsForValue().set(mail, String.valueOf(number), Duration.ofMinutes(1));
         return number;
     }
     
